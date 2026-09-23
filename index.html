@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Simulado da prova teórica do Detran com as 1.500 questões oficiais do Banco Nacional de Questões da Senatran, com o comentário de cada resposta.">
+<meta name="theme-color" content="#efefeb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131619" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Simulado CNH">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icone.svg" type="image/svg+xml">
+
+<style>
+  :root {
+    color-scheme: light dark;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>Simulado CNH do Brasil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --bg: #efefeb;
+    --surface: #ffffff;
+    --surface-2: #f7f7f4;
+    --ink: #15171a;
+    --muted: #595f66;
+    --line: #d4d6d0;
+    --line-forte: #b9bcb5;
+    --verde: #0e7a47;
+    --verde-fraco: #e3f1e9;
+    --vermelho: #c8102e;
+    --vermelho-fraco: #fbe6e9;
+    --amarelo: #f2b705;
+    --amarelo-fraco: #fdf2d2;
+    --azul: #14538f;
+    --sombra: 0 1px 2px rgba(21, 23, 26, .07), 0 6px 16px -10px rgba(21, 23, 26, .3);
+
+    --fonte-placa: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+    --fonte-texto: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --fonte-dado: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #131619;
+      --surface: #1b1f23;
+      --surface-2: #21262b;
+      --ink: #ecede8;
+      --muted: #969ea5;
+      --line: #2c3238;
+      --line-forte: #3d454d;
+      --verde: #3fc585;
+      --verde-fraco: #15291f;
+      --vermelho: #ff6b76;
+      --vermelho-fraco: #2c1418;
+      --amarelo: #ffc62b;
+      --amarelo-fraco: #2a2210;
+      --azul: #6fa8e8;
+      --sombra: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 20px -12px rgba(0, 0, 0, .8);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #131619;
+    --surface: #1b1f23;
+    --surface-2: #21262b;
+    --ink: #ecede8;
+    --muted: #969ea5;
+    --line: #2c3238;
+    --line-forte: #3d454d;
+    --verde: #3fc585;
+    --verde-fraco: #15291f;
+    --vermelho: #ff6b76;
+    --vermelho-fraco: #2c1418;
+    --amarelo: #ffc62b;
+    --amarelo-fraco: #2a2210;
+    --azul: #6fa8e8;
+    --sombra: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 20px -12px rgba(0, 0, 0, .8);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--fonte-texto);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  * { box-sizing: border-box; }
+
+  .coluna {
+    max-width: 700px;
+    margin: 0 auto;
+    padding-inline: 18px;
+    padding-block: 0 56px;
+  }
+
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+
+  .rotulo {
+    font-family: var(--fonte-placa);
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .dado { font-family: var(--fonte-dado); font-variant-numeric: tabular-nums; }
+
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:focus-visible, a:focus-visible, select:focus-visible {
+    outline: 2px solid var(--azul);
+    outline-offset: 2px;
+  }
+
+  /* ---------- capa ---------- */
+
+  .capa { padding-block: 34px 8px; }
+
+  .marca { display: flex; align-items: center; gap: 14px; }
+
+  .losango {
+    width: 54px; height: 54px; flex: none;
+    background: var(--amarelo);
+    border: 3px solid var(--ink);
+    transform: rotate(45deg);
+    display: grid; place-items: center;
+    border-radius: 4px;
+  }
+  .losango span {
+    transform: rotate(-45deg);
+    font-family: var(--fonte-placa);
+    font-weight: 700; font-size: 25px; line-height: 1;
+    color: #15171a;
+  }
+
+  .capa h1 {
+    font-family: var(--fonte-placa);
+    font-size: clamp(30px, 8vw, 42px);
+    line-height: .98;
+    letter-spacing: -.005em;
+    text-transform: uppercase;
+  }
+  .capa h1 small {
+    display: block;
+    font-size: 15px;
+    letter-spacing: .08em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .resumo {
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 15.5px;
+    max-width: 62ch;
+  }
+  .resumo strong { color: var(--ink); font-weight: 600; }
+
+  .regras {
+    display: flex; flex-wrap: wrap; gap: 0;
+    margin-top: 22px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .regras div {
+    flex: 1 1 128px;
+    padding: 13px 15px;
+    border-right: 1px solid var(--line);
+  }
+  .regras div:last-child { border-right: 0; }
+  .regras b {
+    display: block;
+    font-family: var(--fonte-dado);
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .regras span { font-size: 12.5px; color: var(--muted); }
+
+  h2.secao {
+    font-family: var(--fonte-placa);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-size: 15px;
+    margin-top: 34px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .modos { display: grid; gap: 12px; margin-top: 16px; }
+
+  .modo {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--faixa, var(--line-forte));
+    border-radius: 10px;
+    padding: 15px 16px;
+    box-shadow: var(--sombra);
+    transition: transform .12s ease, border-color .12s ease;
+  }
+  .modo:hover { transform: translateY(-1px); border-color: var(--line-forte); }
+  .modo[disabled] { opacity: .5; cursor: not-allowed; transform: none; }
+  .modo h3 { font-size: 17px; font-weight: 600; }
+  .modo p { margin: 3px 0 0; font-size: 13.5px; color: var(--muted); }
+  .modo .seta { font-size: 20px; color: var(--muted); }
+
+  .filtros {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-top: 14px; align-items: center;
+  }
+  select {
+    font: inherit;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line-forte);
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .nota {
+    margin-top: 30px;
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .nota p { margin: 0 0 8px; }
+  .nota p:last-child { margin-bottom: 0; }
+
+  /* ---------- barra da prova ---------- */
+
+  .barra {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding-block: 10px 0;
+    margin-inline: -18px;
+    padding-inline: 18px;
+  }
+  .barra-topo {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  }
+  .contador { font-family: var(--fonte-dado); font-size: 15px; font-weight: 600; }
+  .contador small { color: var(--muted); font-weight: 500; }
+  .relogio {
+    font-family: var(--fonte-dado);
+    font-size: 15px; font-weight: 600;
+    padding: 2px 8px; border-radius: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+  }
+  .relogio.apertado { color: var(--vermelho); border-color: var(--vermelho); }
+
+  .trilho {
+    display: flex; gap: 2px; margin-top: 9px; padding-bottom: 10px;
+  }
+  .trilho i {
+    flex: 1; height: 4px; border-radius: 1px;
+    background: var(--line-forte);
+    opacity: .45;
+  }
+  .trilho i.respondida { opacity: 1; background: var(--azul); }
+  .trilho i.atual { opacity: 1; background: var(--ink); }
+  .trilho i.certa { opacity: 1; background: var(--verde); }
+  .trilho i.errada { opacity: 1; background: var(--vermelho); }
+
+  /* ---------- questão ---------- */
+
+  .questao { padding-top: 24px; }
+
+  .etiquetas { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+  .chip {
+    font-family: var(--fonte-placa);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-size: 11.5px; font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 5px;
+    border: 1px solid var(--line-forte);
+    color: var(--muted);
+  }
+  .chip.dif-0 { color: var(--verde); border-color: var(--verde); }
+  .chip.dif-1 { color: var(--azul); border-color: var(--azul); }
+  .chip.dif-2 { color: var(--vermelho); border-color: var(--vermelho); }
+  .chip.placa {
+    color: var(--ink);
+    background: var(--amarelo);
+    border-color: var(--ink);
+    letter-spacing: .05em;
+  }
+
+  .enunciado {
+    font-size: 19px;
+    line-height: 1.42;
+    font-weight: 500;
+    margin: 14px 0 20px;
+    text-wrap: pretty;
+  }
+
+  .alternativas { display: grid; gap: 9px; }
+
+  .alt {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 11px;
+    align-items: start;
+    text-align: left;
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 13px 14px;
+    font-size: 15.5px;
+    line-height: 1.42;
+    transition: border-color .1s ease, background .1s ease;
+  }
+  .alt:hover:not([disabled]) { border-color: var(--line-forte); }
+  .alt .letra {
+    font-family: var(--fonte-placa);
+    font-weight: 700;
+    font-size: 15px;
+    width: 30px; height: 26px;
+    display: grid; place-items: center;
+    border-radius: 5px;
+    border: 1px solid var(--line-forte);
+    color: var(--muted);
+  }
+  .alt.marcada { border-color: var(--azul); background: var(--surface-2); }
+  .alt.marcada .letra { background: var(--azul); border-color: var(--azul); color: #fff; }
+  .alt.certa { border-color: var(--verde); background: var(--verde-fraco); }
+  .alt.certa .letra { background: var(--verde); border-color: var(--verde); color: #fff; }
+  .alt.errada { border-color: var(--vermelho); background: var(--vermelho-fraco); }
+  .alt.errada .letra { background: var(--vermelho); border-color: var(--vermelho); color: #fff; }
+  .alt[disabled] { cursor: default; }
+
+  .comentario {
+    margin-top: 16px;
+    padding: 14px 15px;
+    border-radius: 9px;
+    background: var(--surface-2);
+    border-left: 4px solid var(--amarelo);
+    font-size: 14.5px;
+  }
+  .comentario .rotulo { display: block; margin-bottom: 4px; }
+
+  .acoes {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .btn {
+    font-family: var(--fonte-placa);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 11px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .btn.vazio { background: transparent; color: var(--ink); border-color: var(--line-forte); }
+  .btn.vazio:hover { border-color: var(--ink); }
+  .btn[disabled] { opacity: .4; cursor: not-allowed; }
+  .btn.largo { flex: 1; text-align: center; }
+
+  /* ---------- resultado ---------- */
+
+  .placar { padding-top: 30px; }
+  .veredito {
+    font-family: var(--fonte-placa);
+    text-transform: uppercase;
+    font-size: clamp(30px, 8vw, 40px);
+    line-height: 1;
+  }
+  .veredito.ok { color: var(--verde); }
+  .veredito.nao { color: var(--vermelho); }
+  .placar .sub { color: var(--muted); margin-top: 6px; font-size: 15px; }
+
+  .regua { margin: 26px 0 8px; }
+  .regua-trilho {
+    position: relative;
+    height: 30px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .regua-preenche { height: 100%; background: var(--verde); opacity: .85; }
+  .regua-preenche.nao { background: var(--vermelho); }
+  .regua-corte {
+    position: absolute; top: -5px; bottom: -5px;
+    width: 2px; background: var(--ink);
+  }
+  .regua-eixo {
+    position: relative; height: 22px; margin-top: 4px;
+    font-family: var(--fonte-dado); font-size: 11.5px; color: var(--muted);
+  }
+  .regua-eixo span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+  .regua-eixo span:first-child { transform: none; }
+  .regua-eixo span:last-child { transform: translateX(-100%); }
+
+  .quebra {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-top: 22px;
+  }
+  .quebra div {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 12px 14px;
+  }
+  .quebra b { font-family: var(--fonte-dado); font-size: 18px; font-weight: 600; display: block; }
+  .quebra span { font-size: 12.5px; color: var(--muted); }
+
+  .revisao { margin-top: 30px; display: grid; gap: 14px; }
+  .item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--verde);
+    border-radius: 9px;
+    padding: 14px 15px;
+  }
+  .item.errou { border-left-color: var(--vermelho); }
+  .item .cab { display: flex; gap: 8px; align-items: baseline; margin-bottom: 6px; }
+  .item .num { font-family: var(--fonte-dado); font-size: 12.5px; color: var(--muted); }
+  .item .q { font-weight: 500; font-size: 15.5px; }
+  .item dl { margin: 10px 0 0; font-size: 14.5px; display: grid; gap: 5px; }
+  .item dt { font-family: var(--fonte-placa); text-transform: uppercase; letter-spacing: .07em; font-size: 11.5px; color: var(--muted); }
+  .item dd { margin: 0; }
+  .item dd.certa { color: var(--verde); font-weight: 500; }
+  .item dd.errada { color: var(--vermelho); }
+  .item .porque { margin-top: 10px; font-size: 14px; color: var(--muted); }
+
+  .vazio-aviso {
+    background: var(--amarelo-fraco);
+    border: 1px solid var(--amarelo);
+    border-radius: 9px;
+    padding: 13px 15px;
+    font-size: 14.5px;
+    margin-top: 16px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="coluna">
+
+  <!-- ============ CAPA ============ -->
+  <section id="tela-inicio">
+    <header class="capa">
+      <div class="marca">
+        <div class="losango" aria-hidden="true"><span>30</span></div>
+        <h1>Simulado<br>CNH do Brasil<small id="capa-fonte">1.500 questões oficiais</small></h1>
+      </div>
+
+      <p class="resumo">
+        As questões abaixo são as do <strong>Banco Nacional de Questões da Senatran</strong> — o mesmo
+        banco de onde todos os Detrans sorteiam a prova teórica desde a Resolução CONTRAN nº 1.020, de
+        1º&nbsp;de&nbsp;dezembro&nbsp;de&nbsp;2025. Não é uma imitação da prova: é o banco dela.
+      </p>
+
+      <div class="regras">
+        <div><b>30</b><span>questões na prova</span></div>
+        <div><b>20</b><span>acertos para passar</span></div>
+        <div><b>60</b><span>minutos de prova</span></div>
+        <div><b class="dado" id="capa-total">1500</b><span>questões no banco</span></div>
+      </div>
+    </header>
+
+    <h2 class="secao">Como treinar</h2>
+    <div class="modos">
+      <button class="modo" style="--faixa: var(--amarelo)" data-modo="simulado">
+        <div>
+          <h3>Simulado completo</h3>
+          <p>30 questões sorteadas, 60 minutos, sem ver a resposta até o fim — igual ao dia da prova.</p>
+        </div>
+        <span class="seta" aria-hidden="true">→</span>
+      </button>
+
+      <button class="modo" style="--faixa: var(--azul)" data-modo="treino">
+        <div>
+          <h3>Treino com correção na hora</h3>
+          <p>Responde e já vê o certo e o porquê. Dá para escolher o módulo e a dificuldade.</p>
+        </div>
+        <span class="seta" aria-hidden="true">→</span>
+      </button>
+
+      <button class="modo" style="--faixa: var(--vermelho)" data-modo="revisao" id="btn-revisao">
+        <div>
+          <h3>Só o que você errou</h3>
+          <p id="txt-revisao">Refaz as questões que você já errou alguma vez.</p>
+        </div>
+        <span class="seta" aria-hidden="true">→</span>
+      </button>
+    </div>
+
+    <div class="filtros">
+      <label class="rotulo" for="sel-modulo">Módulo</label>
+      <select id="sel-modulo">
+        <option value="0">Todos</option>
+        <option value="1">1 — Placas, Cores e Caminhos</option>
+        <option value="2">2 — Escolhas e Consequências</option>
+        <option value="3">3 — Na Direção da Segurança</option>
+        <option value="4">4 — Cuidar, Agir e Preservar</option>
+      </select>
+      <label class="rotulo" for="sel-dif">Dificuldade</label>
+      <select id="sel-dif">
+        <option value="-1">Todas</option>
+        <option value="0">Fácil</option>
+        <option value="1">Intermediário</option>
+        <option value="2">Difícil</option>
+      </select>
+    </div>
+    <p class="rotulo" id="txt-filtro" style="margin-top:10px">&nbsp;</p>
+
+    <div id="historico"></div>
+
+    <div class="nota">
+      <p><b>De onde vem:</b> Banco Nacional de Questões, versão 1.0 — Senatran / Ministério dos
+        Transportes, programa CNH do Brasil. Base legal: Resolução CONTRAN nº 1.020/2025, art. 33
+        (“as questões que compõem os exames teóricos serão extraídas do Banco Nacional de Questões”)
+        e art. 34 (aprovação com vinte acertos).</p>
+      <p><b>O que não dá para saber:</b> a resolução diz que as 30 questões são distribuídas “conforme
+        critérios estabelecidos pelo órgão máximo executivo de trânsito da União”, e esses critérios
+        não são publicados. O simulado sorteia na proporção do próprio banco, que não é
+        necessariamente a proporção da prova.</p>
+      <p><b>Seu progresso</b> fica só neste aparelho, no navegador. Ninguém mais vê, e limpar os dados
+        do site apaga.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROVA ============ -->
+  <section id="tela-prova" hidden>
+    <div class="barra">
+      <div class="barra-topo">
+        <div class="contador"><span id="num-atual">1</span><small id="num-total">/30</small>
+          <small id="etiqueta-modo"></small></div>
+        <div class="relogio dado" id="relogio" hidden>60:00</div>
+      </div>
+      <div class="trilho" id="trilho" aria-hidden="true"></div>
+    </div>
+
+    <div class="questao">
+      <div class="etiquetas" id="etiquetas"></div>
+      <p class="enunciado" id="enunciado"></p>
+      <div class="alternativas" id="alternativas"></div>
+      <div class="comentario" id="comentario" hidden>
+        <span class="rotulo">Por quê</span>
+        <span id="comentario-texto"></span>
+      </div>
+      <div class="acoes">
+        <button class="btn vazio" id="btn-voltar">Voltar</button>
+        <button class="btn largo" id="btn-avancar">Próxima</button>
+      </div>
+      <div class="acoes">
+        <button class="btn vazio" id="btn-sair">Sair sem terminar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTADO ============ -->
+  <section id="tela-resultado" hidden>
+    <div class="placar">
+      <p class="rotulo" id="res-modo">Simulado completo</p>
+      <h2 class="veredito" id="res-veredito">Aprovada</h2>
+      <p class="sub" id="res-sub"></p>
+
+      <div class="regua" id="res-regua">
+        <div class="regua-trilho">
+          <div class="regua-preenche" id="res-preenche"></div>
+          <div class="regua-corte" id="res-corte"></div>
+        </div>
+        <div class="regua-eixo">
+          <span style="left:0">0</span>
+          <span id="res-rotulo-corte">20 = corte</span>
+          <span style="left:100%">30</span>
+        </div>
+      </div>
+
+      <div class="quebra" id="res-quebra"></div>
+
+      <div class="acoes">
+        <button class="btn" id="btn-denovo">Fazer outro</button>
+        <button class="btn vazio" id="btn-inicio">Voltar ao início</button>
+      </div>
+
+      <h2 class="secao">Revisão</h2>
+      <div class="filtros">
+        <button class="btn vazio" id="btn-filtro-revisao" style="font-size:13px;padding:7px 12px">
+          Mostrar também os acertos
+        </button>
+      </div>
+      <div class="revisao" id="res-revisao"></div>
+    </div>
+  </section>
+</div>
+
+<script src="banco.js"></script>
+<script>
+  (function () {
+    'use strict';
+
+    var CHAVE = 'bnq-progresso-v1';
+    var LETRAS = ['A', 'B', 'C', 'D'];
+    var DIFICULDADES = ['Fácil', 'Intermediário', 'Difícil'];
+    var TAM_SIMULADO = 30;
+    var CORTE = 20;
+    var MINUTOS = 60;
+
+    var banco = (window.BNQ && window.BNQ.questoes) || [];
+    var modulos = (window.BNQ && window.BNQ.modulos) || {};
+
+    var el = function (id) { return document.getElementById(id); };
+
+    // ---------- progresso (só neste aparelho) ----------
+
+    function lerProgresso() {
+      try {
+        var cru = localStorage.getItem(CHAVE);
+        if (!cru) return { erros: {}, historico: [] };
+        var p = JSON.parse(cru);
+        return { erros: p.erros || {}, historico: p.historico || [] };
+      } catch (e) {
+        return { erros: {}, historico: [] };
+      }
+    }
+
+    function salvarProgresso(p) {
+      try { localStorage.setItem(CHAVE, JSON.stringify(p)); } catch (e) { /* modo privado, sem drama */ }
+    }
+
+    var progresso = lerProgresso();
+
+    // ---------- sorteio ----------
+
+    function embaralhar(lista) {
+      var a = lista.slice();
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+
+    function filtrar(modulo, dificuldade) {
+      return banco.filter(function (q) {
+        if (modulo && q.m !== modulo) return false;
+        if (dificuldade >= 0 && q.d !== dificuldade) return false;
+        return true;
+      });
+    }
+
+    // ---------- estado da sessão ----------
+
+    var sessao = null;
+
+    function montarSessao(modo, questoes, tamanho) {
+      var escolhidas = embaralhar(questoes).slice(0, tamanho || questoes.length);
+      sessao = {
+        modo: modo,
+        itens: escolhidas.map(function (q) {
+          var alternativas = embaralhar([{ texto: q.c, certa: true }]
+            .concat(q.x.map(function (t) { return { texto: t, certa: false }; })));
+          return { q: q, alternativas: alternativas, marcada: null };
+        }),
+        indice: 0,
+        fim: null,
+        filtroRevisao: 'erros'
+      };
+      if (modo === 'simulado') {
+        sessao.fim = Date.now() + MINUTOS * 60 * 1000;
+      }
+    }
+
+    // ---------- telas ----------
+
+    function mostrar(tela) {
+      el('tela-inicio').hidden = tela !== 'inicio';
+      el('tela-prova').hidden = tela !== 'prova';
+      el('tela-resultado').hidden = tela !== 'resultado';
+      window.scrollTo(0, 0);
+    }
+
+    // ---------- capa ----------
+
+    function pintarCapa() {
+      el('capa-total').textContent = banco.length.toLocaleString('pt-BR');
+      el('capa-fonte').textContent = banco.length.toLocaleString('pt-BR') + ' questões oficiais';
+
+      var nErros = Object.keys(progresso.erros).length;
+      var botao = el('btn-revisao');
+      if (nErros === 0) {
+        botao.disabled = true;
+        el('txt-revisao').textContent = 'Ainda não há erros guardados. Faça um simulado primeiro.';
+      } else {
+        botao.disabled = false;
+        el('txt-revisao').textContent = nErros === 1
+          ? 'Refaz a 1 questão que você já errou.'
+          : 'Refaz as ' + nErros + ' questões que você já errou.';
+      }
+
+      pintarContagemFiltro();
+      pintarHistorico();
+    }
+
+    function pintarContagemFiltro() {
+      var m = Number(el('sel-modulo').value);
+      var d = Number(el('sel-dif').value);
+      var n = filtrar(m, d).length;
+      el('txt-filtro').textContent = n.toLocaleString('pt-BR') +
+        ' questões no filtro atual (vale para o treino)';
+    }
+
+    function pintarHistorico() {
+      var alvo = el('historico');
+      var h = progresso.historico.slice(-6).reverse();
+      if (!h.length) { alvo.innerHTML = ''; return; }
+      var linhas = h.map(function (r) {
+        var data = new Date(r.ts);
+        var quando = data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        var passou = r.acertos >= CORTE;
+        return '<div><b>' + r.acertos + '/' + r.total + '</b><span>' + quando + ' · ' +
+          (r.total === TAM_SIMULADO ? (passou ? 'passaria' : 'não passaria') : 'treino') +
+          '</span></div>';
+      }).join('');
+      alvo.innerHTML = '<h2 class="secao">Seus últimos resultados</h2>' +
+        '<div class="quebra">' + linhas + '</div>';
+    }
+
+    // ---------- prova ----------
+
+    function iniciar(modo) {
+      var m = Number(el('sel-modulo').value);
+      var d = Number(el('sel-dif').value);
+
+      if (modo === 'simulado') {
+        montarSessao('simulado', banco, TAM_SIMULADO);
+      } else if (modo === 'treino') {
+        var pool = filtrar(m, d);
+        if (!pool.length) { alert('Nenhuma questão com esse filtro.'); return; }
+        montarSessao('treino', pool, Math.min(pool.length, 20));
+      } else {
+        var ids = progresso.erros;
+        var pendentes = banco.filter(function (q) { return ids[q.i]; });
+        if (!pendentes.length) {
+          // Acertou tudo na última revisão: não há o que refazer.
+          pintarCapa();
+          mostrar('inicio');
+          return;
+        }
+        montarSessao('revisao', pendentes, Math.min(pendentes.length, 20));
+      }
+
+      el('etiqueta-modo').textContent = modo === 'simulado' ? ' · simulado'
+        : modo === 'treino' ? ' · treino' : ' · revisão';
+      el('relogio').hidden = modo !== 'simulado';
+      el('num-total').textContent = '/' + sessao.itens.length;
+
+      montarTrilho();
+      pintarQuestao();
+      mostrar('prova');
+      if (modo === 'simulado') tocarRelogio();
+    }
+
+    function montarTrilho() {
+      var t = el('trilho');
+      t.innerHTML = '';
+      for (var i = 0; i < sessao.itens.length; i++) t.appendChild(document.createElement('i'));
+    }
+
+    function pintarTrilho() {
+      var marcas = el('trilho').children;
+      for (var i = 0; i < sessao.itens.length; i++) {
+        var item = sessao.itens[i];
+        var c = '';
+        if (i === sessao.indice) c = 'atual';
+        else if (item.marcada != null) {
+          if (sessao.modo === 'simulado') c = 'respondida';
+          else c = item.alternativas[item.marcada].certa ? 'certa' : 'errada';
+        }
+        marcas[i].className = c;
+      }
+    }
+
+    function pintarQuestao() {
+      var item = sessao.itens[sessao.indice];
+      var q = item.q;
+      var revelar = sessao.modo !== 'simulado' && item.marcada != null;
+
+      el('num-atual').textContent = sessao.indice + 1;
+
+      var etiquetas = '<span class="chip dif-' + q.d + '">' + DIFICULDADES[q.d] + '</span>' +
+        '<span class="chip">Módulo ' + q.m + ' · ' + modulos[q.m] + '</span>';
+      if (q.p) etiquetas += '<span class="chip placa">Placa ' + q.p + '</span>';
+      el('etiquetas').innerHTML = etiquetas;
+
+      el('enunciado').textContent = q.e;
+
+      var caixa = el('alternativas');
+      caixa.innerHTML = '';
+      item.alternativas.forEach(function (alt, i) {
+        var b = document.createElement('button');
+        b.className = 'alt';
+        b.type = 'button';
+        b.innerHTML = '<span class="letra">' + LETRAS[i] + '</span><span></span>';
+        b.lastChild.textContent = alt.texto;
+
+        if (revelar) {
+          b.disabled = true;
+          if (alt.certa) b.classList.add('certa');
+          else if (item.marcada === i) b.classList.add('errada');
+        } else if (item.marcada === i) {
+          b.classList.add('marcada');
+        }
+
+        b.addEventListener('click', function () { responder(i); });
+        caixa.appendChild(b);
+      });
+
+      if (revelar && q.k) {
+        el('comentario-texto').textContent = q.k;
+        el('comentario').hidden = false;
+      } else {
+        el('comentario').hidden = true;
+      }
+
+      el('btn-voltar').disabled = sessao.indice === 0;
+      el('btn-avancar').textContent =
+        sessao.indice === sessao.itens.length - 1 ? 'Terminar' : 'Próxima';
+
+      pintarTrilho();
+    }
+
+    function responder(i) {
+      var item = sessao.itens[sessao.indice];
+      if (sessao.modo !== 'simulado' && item.marcada != null) return;
+      item.marcada = i;
+      pintarQuestao();
+    }
+
+    function avancar() {
+      if (sessao.indice === sessao.itens.length - 1) { terminar(); return; }
+      sessao.indice++;
+      pintarQuestao();
+      window.scrollTo(0, 0);
+    }
+
+    function voltar() {
+      if (sessao.indice === 0) return;
+      sessao.indice--;
+      pintarQuestao();
+      window.scrollTo(0, 0);
+    }
+
+    // ---------- relógio ----------
+
+    var timer = null;
+
+    function tocarRelogio() {
+      clearInterval(timer);
+      timer = setInterval(function () {
+        var resta = Math.max(0, sessao.fim - Date.now());
+        var min = Math.floor(resta / 60000);
+        var seg = Math.floor((resta % 60000) / 1000);
+        var r = el('relogio');
+        r.textContent = (min < 10 ? '0' : '') + min + ':' + (seg < 10 ? '0' : '') + seg;
+        r.classList.toggle('apertado', resta <= 5 * 60 * 1000);
+        if (resta === 0) { clearInterval(timer); terminar(); }
+      }, 250);
+    }
+
+    // ---------- resultado ----------
+
+    function terminar() {
+      clearInterval(timer);
+
+      var acertos = 0;
+      sessao.itens.forEach(function (item) {
+        var certa = item.marcada != null && item.alternativas[item.marcada].certa;
+        if (certa) { acertos++; delete progresso.erros[item.q.i]; }
+        else { progresso.erros[item.q.i] = (progresso.erros[item.q.i] || 0) + 1; }
+      });
+
+      progresso.historico.push({
+        ts: Date.now(), acertos: acertos, total: sessao.itens.length, modo: sessao.modo
+      });
+      if (progresso.historico.length > 40) progresso.historico = progresso.historico.slice(-40);
+      salvarProgresso(progresso);
+
+      pintarResultado(acertos);
+      mostrar('resultado');
+    }
+
+    function pintarResultado(acertos) {
+      var total = sessao.itens.length;
+      var eSimulado = sessao.modo === 'simulado';
+      var passou = acertos >= CORTE;
+
+      el('res-modo').textContent = eSimulado ? 'Simulado completo'
+        : sessao.modo === 'treino' ? 'Treino' : 'Revisão dos erros';
+
+      var v = el('res-veredito');
+      if (eSimulado) {
+        v.textContent = passou ? 'Passou' : 'Não passou';
+        v.className = 'veredito ' + (passou ? 'ok' : 'nao');
+        el('res-sub').textContent = passou
+          ? acertos + ' de 30 — o corte é 20. Na prova de verdade isso é aprovação.'
+          : acertos + ' de 30 — faltaram ' + (CORTE - acertos) +
+            (CORTE - acertos === 1 ? ' acerto' : ' acertos') + ' para o corte de 20.';
+      } else {
+        v.textContent = acertos + ' de ' + total;
+        v.className = 'veredito';
+        el('res-sub').textContent = 'Treino não tem corte — o corte de 20 vale para a prova de 30 questões.';
+      }
+
+      // Régua 0–30 só faz sentido na escala da prova real.
+      var regua = el('res-regua');
+      regua.hidden = !eSimulado;
+      if (eSimulado) {
+        el('res-preenche').style.width = (acertos / 30 * 100) + '%';
+        el('res-preenche').className = 'regua-preenche' + (passou ? '' : ' nao');
+        el('res-corte').style.left = (CORTE / 30 * 100) + '%';
+        el('res-rotulo-corte').style.left = (CORTE / 30 * 100) + '%';
+      }
+
+      // Quebra por módulo: mostra onde ela está perdendo ponto.
+      var porModulo = {};
+      sessao.itens.forEach(function (item) {
+        var m = item.q.m;
+        porModulo[m] = porModulo[m] || { certas: 0, total: 0 };
+        porModulo[m].total++;
+        if (item.marcada != null && item.alternativas[item.marcada].certa) porModulo[m].certas++;
+      });
+      el('res-quebra').innerHTML = Object.keys(porModulo).sort().map(function (m) {
+        var r = porModulo[m];
+        return '<div><b>' + r.certas + '/' + r.total + '</b><span>Módulo ' + m + ' · ' +
+          modulos[m] + '</span></div>';
+      }).join('');
+
+      pintarRevisao();
+    }
+
+    // Monta nó por nó: o texto do banco entra sempre por textContent, nunca por
+    // innerHTML — enunciado e comentário vêm com aspas e sinais que não devem
+    // ser interpretados como marcação.
+    function criar(tag, classe, texto) {
+      var n = document.createElement(tag);
+      if (classe) n.className = classe;
+      if (texto != null) n.textContent = texto;
+      return n;
+    }
+
+    function pintarRevisao() {
+      var so = sessao.filtroRevisao === 'erros';
+      var alvo = el('res-revisao');
+      alvo.innerHTML = '';
+      var mostrados = 0;
+
+      sessao.itens.forEach(function (item, i) {
+        var certa = item.marcada != null && item.alternativas[item.marcada].certa;
+        if (so && certa) return;
+        mostrados++;
+
+        var textoCerta = item.alternativas.filter(function (a) { return a.certa; })[0].texto;
+        var suaResposta = item.marcada == null ? 'Você não respondeu.'
+          : item.alternativas[item.marcada].texto;
+
+        var art = criar('article', 'item' + (certa ? '' : ' errou'));
+
+        var cab = criar('div', 'cab');
+        cab.appendChild(criar('span', 'num', String(i + 1)));
+        cab.appendChild(criar('span', 'q', item.q.e));
+        art.appendChild(cab);
+
+        var dl = criar('dl');
+        if (!certa) {
+          dl.appendChild(criar('dt', null, 'Você marcou'));
+          dl.appendChild(criar('dd', 'errada', suaResposta));
+        }
+        dl.appendChild(criar('dt', null, 'Resposta correta'));
+        dl.appendChild(criar('dd', 'certa', textoCerta));
+        art.appendChild(dl);
+
+        if (item.q.k) art.appendChild(criar('p', 'porque', item.q.k));
+
+        alvo.appendChild(art);
+      });
+
+      if (!mostrados) {
+        alvo.appendChild(criar('div', 'vazio-aviso',
+          'Nenhum erro nesta rodada. Toque em “Mostrar também os acertos” para reler tudo.'));
+      }
+
+      el('btn-filtro-revisao').textContent = so
+        ? 'Mostrar também os acertos' : 'Mostrar só os erros';
+    }
+
+    // ---------- ligações ----------
+
+    Array.prototype.forEach.call(document.querySelectorAll('.modo'), function (b) {
+      b.addEventListener('click', function () { iniciar(b.dataset.modo); });
+    });
+
+    el('sel-modulo').addEventListener('change', pintarContagemFiltro);
+    el('sel-dif').addEventListener('change', pintarContagemFiltro);
+
+    el('btn-avancar').addEventListener('click', avancar);
+    el('btn-voltar').addEventListener('click', voltar);
+    el('btn-sair').addEventListener('click', function () {
+      clearInterval(timer);
+      pintarCapa();
+      mostrar('inicio');
+    });
+
+    el('btn-denovo').addEventListener('click', function () { iniciar(sessao.modo); });
+    el('btn-inicio').addEventListener('click', function () {
+      pintarCapa();
+      mostrar('inicio');
+    });
+    el('btn-filtro-revisao').addEventListener('click', function () {
+      sessao.filtroRevisao = sessao.filtroRevisao === 'erros' ? 'tudo' : 'erros';
+      pintarRevisao();
+    });
+
+    pintarCapa();
+  })();
+</script>
+</body>
+</html>
