@@ -1,0 +1,335 @@
+FIGURAS DAS PLACAS — ORIGEM E LICENÇA
+
+As figuras não vêm do PDF do Banco Nacional de Questões (que traz apenas o
+código de cada placa). Foram obtidas no Wikimedia Commons e só foram usadas
+quando o nome do arquivo contém exatamente o código da questão.
+
+Cada arquivo foi higienizado antes de publicar: script, handlers de evento e
+objetos externos foram removidos do SVG.
+
+------------------------------------------------------------------------
+
+A-11a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-11a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-12.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-12.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-14.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-14.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-15.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-15.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-17.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-17.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-18.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-18.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-19.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-19.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-1a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-1a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-1b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-1b.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-20a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-20a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-20b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-20b.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-2a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-2a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-2b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-2b.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-31.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-31.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-32a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-32a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-35.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-35.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-39.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-39.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-3a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-3a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-40.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-40.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-41.svg
+   origem : https://commons.wikimedia.org/wiki/File:1999_Brazil_road_sign_A-41.svg
+   autoria: Design: Transportation Ministry Vectorization: Big guy 637
+   licença: Public domain
+
+A-42a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-42a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-42b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-42b.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-42c.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-42c.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-45.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-45.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-4b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-4b.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-5a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-5a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-6.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-6.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-7a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-7a.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-8.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-8.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+A-9.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_A-9.svg
+   autoria: Departamento Nacional de Infraestrutura de Transportes
+   licença: Public domain
+
+R-10.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-10.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-14.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-14.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-15.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-15.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-16.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-16.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-20.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-20.svg
+   autoria: Departamento Nacional de Trânsito
+   licença: Public domain
+
+R-23.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-23.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-24a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-24a.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-24b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-24b.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-25a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-25a.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-25b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-25b.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-25c.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-25c.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-25d.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-25d.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-26.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-26.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-27.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-27.svg
+   autoria: Departamento Nacional de Trânsito
+   licença: Public domain
+
+R-28.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-28.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-29.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-29.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-30.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-30.svg
+   autoria: Departamento Nacional de Trânsito
+   licença: CC BY-SA 3.0
+
+R-31.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-31.svg
+   autoria: Departamento Nacional de Trânsito
+   licença: CC BY-SA 3.0
+
+R-32.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-32.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-33.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-33.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-34.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-34.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-37.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-37.svg
+   autoria: Departamento Nacional de Trânsito
+   licença: Public domain
+
+R-38.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-38.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-39.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-39.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-4a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-4a.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-4b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-4b.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-5a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-5a.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-5b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-5b.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-6a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-6a.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-6b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-6b.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-6c.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-6c.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-7.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-7.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-8a.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-8a.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-8b.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-8b.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0
+
+R-9.svg
+   origem : https://commons.wikimedia.org/wiki/File:Brasil_R-9.svg
+   autoria: Amateria1121
+   licença: CC BY-SA 3.0

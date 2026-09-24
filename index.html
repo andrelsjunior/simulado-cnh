@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Simulado da prova teórica do Detran com as 1.500 questões oficiais do Banco Nacional de Questões da Senatran, com o comentário de cada resposta.">
+<meta name="description" content="Simulado da prova teórica do Detran com as questões oficiais do Banco Nacional de Questões da Senatran, com o comentário de cada resposta.">
 <meta name="theme-color" content="#efefeb" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131619" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
@@ -311,6 +311,21 @@
     letter-spacing: .05em;
   }
 
+  .placa-figura {
+    margin: 16px 0 0;
+    padding: 14px;
+    display: flex;
+    justify-content: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .placa-figura img {
+    width: 150px; height: 150px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
   .enunciado {
     font-size: 19px;
     line-height: 1.42;
@@ -550,6 +565,11 @@
         critérios estabelecidos pelo órgão máximo executivo de trânsito da União”, e esses critérios
         não são publicados. O simulado sorteia na proporção do próprio banco, que não é
         necessariamente a proporção da prova.</p>
+      <p id="nota-figuras"></p>
+      <p id="nota-creditos"><b>As figuras das placas</b> não vêm do PDF oficial — ele traz só o código de cada placa
+        (A-33a, R-3…). Os desenhos vieram do Wikimedia Commons, em domínio público ou CC BY-SA 3.0,
+        e só foram usados quando o nome do arquivo contém exatamente o código da questão.
+        <a href="placas/CREDITOS.txt" id="link-creditos">Autoria e licença de cada figura</a>.</p>
       <p><b>Seu progresso</b> fica só neste aparelho, no navegador. Ninguém mais vê, e limpar os dados
         do site apaga.</p>
     </div>
@@ -568,6 +588,9 @@
 
     <div class="questao">
       <div class="etiquetas" id="etiquetas"></div>
+      <figure class="placa-figura" id="placa-figura" hidden>
+        <img id="placa-img" alt="Placa de trânsito da questão" width="150" height="150">
+      </figure>
       <p class="enunciado" id="enunciado"></p>
       <div class="alternativas" id="alternativas"></div>
       <div class="comentario" id="comentario" hidden>
@@ -710,8 +733,31 @@
     // ---------- capa ----------
 
     function pintarCapa() {
-      el('capa-total').textContent = banco.length.toLocaleString('pt-BR');
-      el('capa-fonte').textContent = banco.length.toLocaleString('pt-BR') + ' questões oficiais';
+      var br = function (n) { return n.toLocaleString('pt-BR'); };
+      el('capa-total').textContent = br(banco.length);
+      el('capa-fonte').textContent = br(banco.length) + ' questões oficiais';
+
+      // Número honesto: o documento tem 1.500, mas parte delas pergunta sobre
+      // uma placa que o PDF não mostra. Essas ficam de fora do sorteio.
+      var meta = window.BNQ || {};
+      if (meta.excluidas) {
+        el('nota-figuras').innerHTML = '<b>Por que não são 1.500:</b> o documento oficial tem ' +
+          br(meta.total_documento) + ' questões, mas ' + br(meta.excluidas) +
+          ' delas perguntam sobre uma placa que o PDF não mostra (“o que essa placa indica?”) e ' +
+          'para as quais não foi possível recuperar a figura. Sem a imagem elas são impossíveis de ' +
+          'responder, então ficam fora do sorteio. Sobram <b>' + br(meta.total) +
+          '</b>, das quais ' + br(meta.com_figura || 0) + ' aparecem com a figura da placa.';
+      } else {
+        el('nota-figuras').textContent = '';
+      }
+
+      // Sem figura nenhuma, o parágrafo de crédito não faz sentido. E no
+      // arquivo único (offline) o CREDITOS.txt não existe: vira texto.
+      el('nota-creditos').hidden = !meta.com_figura;
+      if (window.PLACAS) {
+        var link = el('link-creditos');
+        if (link) link.replaceWith(document.createTextNode('Créditos no site.'));
+      }
 
       var nErros = Object.keys(progresso.erros).length;
       var botao = el('btn-revisao');
@@ -741,16 +787,33 @@
       var alvo = el('historico');
       var h = progresso.historico.slice(-6).reverse();
       if (!h.length) { alvo.innerHTML = ''; return; }
-      var linhas = h.map(function (r) {
-        var data = new Date(r.ts);
-        var quando = data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-        var passou = r.acertos >= CORTE;
-        return '<div><b>' + r.acertos + '/' + r.total + '</b><span>' + quando + ' · ' +
-          (r.total === TAM_SIMULADO ? (passou ? 'passaria' : 'não passaria') : 'treino') +
-          '</span></div>';
-      }).join('');
-      alvo.innerHTML = '<h2 class="secao">Seus últimos resultados</h2>' +
-        '<div class="quebra">' + linhas + '</div>';
+      // Nada aqui entra por innerHTML: os valores vêm do localStorage, que é
+      // gravado por esta página mas pode ter sido mexido no aparelho.
+      alvo.innerHTML = '';
+      var titulo = document.createElement('h2');
+      titulo.className = 'secao';
+      titulo.textContent = 'Seus últimos resultados';
+      alvo.appendChild(titulo);
+
+      var caixa = document.createElement('div');
+      caixa.className = 'quebra';
+      h.forEach(function (r) {
+        var acertos = Number(r.acertos) || 0;
+        var total = Number(r.total) || 0;
+        var quando = new Date(r.ts).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        var rotulo = total === TAM_SIMULADO
+          ? (acertos >= CORTE ? 'passaria' : 'não passaria')
+          : 'treino';
+        var div = document.createElement('div');
+        var b = document.createElement('b');
+        b.textContent = acertos + '/' + total;
+        var span = document.createElement('span');
+        span.textContent = quando + ' · ' + rotulo;
+        div.appendChild(b);
+        div.appendChild(span);
+        caixa.appendChild(div);
+      });
+      alvo.appendChild(caixa);
     }
 
     // ---------- prova ----------
@@ -819,6 +882,20 @@
         '<span class="chip">Módulo ' + q.m + ' · ' + modulos[q.m] + '</span>';
       if (q.p) etiquetas += '<span class="chip placa">Placa ' + q.p + '</span>';
       el('etiquetas').innerHTML = etiquetas;
+
+      // A figura da placa: no site vem de placas/<código>.svg; no arquivo único
+      // ela já está embutida em window.PLACAS como data URI.
+      var figura = el('placa-figura');
+      if (q.g && q.p) {
+        var img = el('placa-img');
+        // Se a figura não carregar, esconder a moldura vazia em vez de deixar
+        // um ícone quebrado ao lado de uma pergunta que depende dela.
+        img.onerror = function () { figura.hidden = true; };
+        img.src = (window.PLACAS && window.PLACAS[q.p]) || ('placas/' + q.p + '.svg');
+        figura.hidden = false;
+      } else {
+        figura.hidden = true;
+      }
 
       el('enunciado').textContent = q.e;
 

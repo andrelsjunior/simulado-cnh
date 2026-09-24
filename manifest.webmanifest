@@ -1,7 +1,7 @@
 {
   "name": "Simulado CNH do Brasil",
   "short_name": "Simulado CNH",
-  "description": "Simulado da prova teórica do Detran com as 1.500 questões oficiais do Banco Nacional de Questões da Senatran, com o comentário de cada resposta.",
+  "description": "Simulado da prova teórica do Detran com as questões oficiais do Banco Nacional de Questões da Senatran, com o comentário de cada resposta.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#efefeb",
