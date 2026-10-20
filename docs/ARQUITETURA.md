@@ -72,3 +72,22 @@ página no fim). Verifique: zero erros no console, fluxo completo por teclado E 
 ## Git
 Trabalhe SÓ no seu worktree (caminho no seu prompt). Commits pequenos e descritivos em português,
 SEM linha Co-Authored-By. Não faça push, merge nem rebase; não toque em main.
+
+## Link de transferência (js/pacote.js, js/enviar.js, nucleo.js)
+
+`SIM.pacoteTransferencia()` gera o texto depois de `#p=`; `SIM.lerPacote(txt)` lê de volta;
+`SIM.juntar(o)` junta ao progresso local (por questão vence a hora mais recente e, na mesma hora,
+quem tem mais tentativas; dias e contadores pelo maior valor; conquistas, histórico, termos do
+glossário e palavras por união).
+
+Formato v5: `[versão][soma de 16 bits][corpo]` em base64url. O corpo sai de um codificador
+aritmético binário adaptativo (estilo LZMA, probabilidades de 11 bits). Uma só função, `esquema()`,
+descreve a ordem dos campos e roda nos dois sentidos. Ordem: hora do envio; tamanho do banco;
+tabela de sessões (horas distintas com resposta); para cada questão do banco um bit "tem registro"
+e, se tiver, acertos, erros, dúvidas, 🚩, caixa (com contexto do resultado) e o número da sessão;
+depois histórico (30), dias (60), conquistas (1 bit cada), contadores, placas (pela lista
+`SIM.placasCodigos`), termos do glossário vistos (1 bit cada) e palavras "não entendi". Não viajam:
+tentativas (= acertos + erros + dúvidas) e próxima revisão (= última resposta + intervalo da caixa).
+A ordem do banco, do catálogo de conquistas, das placas e do glossário faz parte do formato: mudou
+alguma lista, suba `VERSAO`.
+

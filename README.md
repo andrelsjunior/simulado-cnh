@@ -31,7 +31,12 @@ uma.
 - **Voz**: botão para ouvir a questão e modo "Ouvir (mãos livres)" para estudar no trânsito.
 - **Conquistas** (22, cinco secretas) que premiam aprendizado, e o **Simulado Chefão**
   (30 difíceis/anti-chute, 45 min, corte 25) liberado quando a chance chega a 80%.
-- **Backup** do progresso (arquivo ou texto) para passar entre celular e computador.
+- **Enviar para outro aparelho**: um link para mandar a você mesmo (WhatsApp, e-mail). Ao tocar
+  nele no outro aparelho, o progresso se junta ao de lá, valendo a resposta mais recente de cada
+  questão. O progresso vai inteiro depois do `#`, sem passar por servidor, codificado sob medida
+  (codificador aritmético adaptativo): umas centenas de caracteres para algumas centenas de
+  questões, ~2 mil para o banco inteiro.
+- **Backup** completo do progresso (arquivo ou texto), que substitui tudo.
 - As 7 questões que o documento oficial repete palavra por palavra contam uma vez só (1.478).
 
 Tudo continua estático, sem servidor e sem coleta: o progresso fica no `localStorage`.

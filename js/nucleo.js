@@ -365,4 +365,68 @@
     try { localStorage.setItem(CHAVE, JSON.stringify(SIM.progresso)); } catch (e) { /* idem */ }
     SIM.emit('importado');
   };
+
+  // ---------- junção com o progresso de outro aparelho ----------
+  // (o link em si é montado e lido em js/pacote.js)
+
+  const HORA = 3600 * 1000;
+
+  // Junta o que veio de outro aparelho com o daqui, sem perder nada:
+  // em cada questão vale a resposta mais recente; contadores ficam no maior valor.
+  SIM.juntar = function (o) {
+    const p = SIM.progresso;
+    const r = { novas: 0, atualizadas: 0 };
+    Object.keys(o.q).forEach((id) => {
+      const local = p.q[id];
+      if (!local) { p.q[id] = o.q[id]; r.novas++; }
+      else {
+        // O link traz a hora cheia: na mesma hora, desempata quem respondeu mais vezes.
+        const hi = Math.floor((o.q[id].u || 0) / HORA), hl = Math.floor((local.u || 0) / HORA);
+        if (hi > hl || (hi === hl && o.q[id].n > local.n)) { p.q[id] = o.q[id]; r.atualizadas++; }
+      }
+    });
+
+    // As datas viajam arredondadas na hora: mesma rodada = mesmo modo e placar com até 1 h de diferença.
+    const mesma = (a, b) => a.modo === b.modo && a.acertos === b.acertos && a.total === b.total && Math.abs(a.ts - b.ts) < HORA;
+    o.historico.forEach((h) => { if (!p.historico.some((l) => mesma(l, h))) p.historico.push(h); });
+    p.historico.sort((a, b) => a.ts - b.ts);
+    if (p.historico.length > 200) p.historico = p.historico.slice(-200);
+
+    Object.keys(o.dias).forEach((dia) => {
+      const l = p.dias[dia] || (p.dias[dia] = { resp: 0, novas: 0, revis: 0 });
+      Object.keys(o.dias[dia]).forEach((k) => { l[k] = Math.max(Number(l[k]) || 0, Number(o.dias[dia][k]) || 0); });
+    });
+
+    p.conquistas = p.conquistas || {};
+    Object.keys(o.conquistas).forEach((id) => {
+      p.conquistas[id] = p.conquistas[id] ? Math.min(p.conquistas[id], o.conquistas[id]) : o.conquistas[id];
+    });
+
+    Object.keys(o.cont).forEach((k) => {
+      const v = o.cont[k];
+      if (typeof v === 'number') p.cont[k] = Math.max(Number(p.cont[k]) || 0, v);
+      else if (p.cont[k] == null) p.cont[k] = v;
+    });
+
+    p.placas = p.placas || {};
+    Object.keys(o.placas).forEach((c) => {
+      const l = p.placas[c], x = o.placas[c];
+      const maisNova = l && l.u && x.u ? x.u > l.u
+        : (x.n || 0) > (l ? l.n || 0 : -1) || (l && (x.n || 0) === (l.n || 0) && (x.pr || 0) > (l.pr || 0));
+      if (!l || maisNova) p.placas[c] = x;
+    });
+
+    p.glossarioVistos = p.glossarioVistos || {};
+    Object.keys(o.glossarioVistos || {}).forEach((t) => {
+      if (!p.glossarioVistos[t]) p.glossarioVistos[t] = o.glossarioVistos[t];
+    });
+
+    const ne = {};
+    (p.naoEntendi || []).forEach((x) => { ne[x.palavra + '|' + x.questao] = true; });
+    p.naoEntendi = (p.naoEntendi || []).concat(o.naoEntendi.filter((x) => !ne[x.palavra + '|' + x.questao]));
+
+    try { localStorage.setItem(CHAVE, JSON.stringify(p)); } catch (e) { /* modo privado */ }
+    SIM.emit('importado');
+    return r;
+  };
 })();

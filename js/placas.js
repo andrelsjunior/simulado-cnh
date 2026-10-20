@@ -96,6 +96,7 @@
   });
   const CODIGOS = Object.keys(porCodigo).sort((a, b) =>
     a.localeCompare(b, 'pt-BR', { numeric: true }));
+  SIM.placasCodigos = CODIGOS;
 
   const figura = (cod) => (window.PLACAS && window.PLACAS[cod]) || ('placas/' + cod + '.svg');
 
@@ -121,6 +122,7 @@
       r.cx = 1;
     }
     r.pr = Date.now() + INTERVALO[r.cx];
+    r.u = Date.now();
     SIM.salvar();
   }
 
