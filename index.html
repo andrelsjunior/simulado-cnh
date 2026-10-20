@@ -500,59 +500,66 @@
         <div class="losango" aria-hidden="true"><span>30</span></div>
         <h1>Simulado<br>CNH do Brasil<small id="capa-fonte">1.500 questões oficiais</small></h1>
       </div>
+      <div class="nivel" id="nivel"></div>
+    </header>
 
-      <p class="resumo">
-        As questões abaixo são as do <strong>Banco Nacional de Questões da Senatran</strong> — o mesmo
-        banco de onde todos os Detrans sorteiam a prova teórica desde a Resolução CONTRAN nº 1.020, de
-        1º&nbsp;de&nbsp;dezembro&nbsp;de&nbsp;2025. Não é uma imitação da prova: é o banco dela.
-      </p>
+    <div class="hud" id="hud"></div>
 
+    <div class="proximo" id="proximo"></div>
+
+    <h2 class="secao">Modos de jogo</h2>
+    <div class="modos" id="modos"></div>
+
+    <div class="treino-ajuste">
+      <p class="rotulo">Ajustar o Treino e o Ouvir</p>
+      <div class="filtros">
+        <span class="filtro"><label class="rotulo" for="sel-modulo">Módulo</label>
+        <select id="sel-modulo" data-nav>
+          <option value="0">Todos</option>
+          <option value="1">1 — Placas, Cores e Caminhos</option>
+          <option value="2">2 — Escolhas e Consequências</option>
+          <option value="3">3 — Na Direção da Segurança</option>
+          <option value="4">4 — Cuidar, Agir e Preservar</option>
+        </select></span>
+        <span class="filtro"><label class="rotulo" for="sel-dif">Dificuldade</label>
+        <select id="sel-dif" data-nav>
+          <option value="-1">Todas</option>
+          <option value="0">Fácil</option>
+          <option value="1">Intermediário</option>
+          <option value="2">Difícil</option>
+        </select></span>
+        <span class="filtro"><label class="rotulo" for="sel-extra">Só</label>
+        <select id="sel-extra" data-nav>
+          <option value="">Todas</option>
+          <option value="novas">Nunca vistas</option>
+          <option value="marcadas">Marcadas 🚩</option>
+          <option value="ac">Anti-chute</option>
+          <option value="placa">Com placa</option>
+        </select></span>
+      </div>
+    </div>
+
+    <h2 class="secao">Fases</h2>
+    <div id="painel" class="painel"></div>
+
+    <h2 class="secao">Ferramentas</h2>
+    <div class="menu-mais" id="menu-mais"></div>
+
+    <div id="historico"></div>
+
+    <details class="sobre">
+      <summary data-nav>Sobre a prova e o banco de questões</summary>
       <div class="regras">
         <div><b>30</b><span>questões na prova</span></div>
         <div><b>20</b><span>acertos para passar</span></div>
         <div><b>60</b><span>minutos de prova</span></div>
         <div><b class="dado" id="capa-total">1500</b><span>questões no banco</span></div>
       </div>
-    </header>
-
-    <h2 class="secao">Pronto pra prova?</h2>
-    <div id="painel" class="painel"></div>
-
-    <h2 class="secao">Como treinar</h2>
-    <div class="modos" id="modos"></div>
-
-    <div class="filtros">
-      <label class="rotulo" for="sel-modulo">Módulo</label>
-      <select id="sel-modulo" data-nav>
-        <option value="0">Todos</option>
-        <option value="1">1 — Placas, Cores e Caminhos</option>
-        <option value="2">2 — Escolhas e Consequências</option>
-        <option value="3">3 — Na Direção da Segurança</option>
-        <option value="4">4 — Cuidar, Agir e Preservar</option>
-      </select>
-      <label class="rotulo" for="sel-dif">Dificuldade</label>
-      <select id="sel-dif" data-nav>
-        <option value="-1">Todas</option>
-        <option value="0">Fácil</option>
-        <option value="1">Intermediário</option>
-        <option value="2">Difícil</option>
-      </select>
-      <label class="rotulo" for="sel-extra">Só</label>
-      <select id="sel-extra" data-nav>
-        <option value="">Todas</option>
-        <option value="novas">Nunca vistas</option>
-        <option value="marcadas">Marcadas 🚩</option>
-        <option value="ac">Anti-chute</option>
-        <option value="placa">Com placa</option>
-      </select>
-    </div>
-    <p class="muted filtros-dica">Os filtros valem para o Treino.</p>
-
-    <h2 class="secao">Mais</h2>
-    <div class="menu-mais" id="menu-mais"></div>
-
-    <div id="historico"></div>
-
+      <p class="resumo">
+        As questões abaixo são as do <strong>Banco Nacional de Questões da Senatran</strong> — o mesmo
+        banco de onde todos os Detrans sorteiam a prova teórica desde a Resolução CONTRAN nº 1.020, de
+        1º&nbsp;de&nbsp;dezembro&nbsp;de&nbsp;2025. Não é uma imitação da prova: é o banco dela.
+      </p>
     <div class="nota">
       <p><b>De onde vem:</b> Banco Nacional de Questões, versão 1.0 — Senatran / Ministério dos
         Transportes, programa CNH do Brasil. Base legal: Resolução CONTRAN nº 1.020/2025, art. 33
@@ -570,6 +577,7 @@
       <p><b>Seu progresso</b> fica só neste aparelho, no navegador. Ninguém mais vê, e limpar os dados
         do site apaga — use o backup em Configurações para levar para outro aparelho.</p>
     </div>
+    </details>
   </section>
 
   <!-- ============ PROVA ============ -->

@@ -35,44 +35,175 @@ kbd {
   color: var(--muted);
 }
 /* Sem teclado (toque): esconde dicas e letras de atalho. */
-.modo .seta .seta-flecha { display: none; }
-.modo .seta:not(.com-tecla) .seta-flecha { display: inline; }
-.modo .seta:not(.com-tecla) { border: 0; }
 @media (hover: none), (pointer: coarse) {
-  .dica-teclas, .menu-item kbd { display: none; }
-  .modo .seta .seta-tecla { display: none; }
-  .modo .seta .seta-flecha { display: inline; }
-  .modo .seta { border: 0; }
+  .dica-teclas, .menu-item kbd, .modo-lado kbd, .proximo-play kbd { display: none; }
 }
 
-/* ---------- painel "pronto pra prova?" ---------- */
+/* ---------- capa: marca + nível ---------- */
 
-.painel {
-  margin-top: 16px;
+.capa {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 16px 24px; padding-block: 28px 0;
+}
+.nivel {
+  flex: 0 1 260px; min-width: 220px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 16px;
+  padding: 10px 12px;
   box-shadow: var(--sombra);
 }
-.painel-topo { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
-@media (max-width: 480px) { .painel-topo { grid-template-columns: 1fr; } }
-.painel-chance b, .painel-meta b {
-  display: block;
-  font-size: 34px; line-height: 1.05; font-weight: 600;
+.nivel-topo { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.nivel-topo b { font-weight: 600; font-size: 14.5px; line-height: 1.2; }
+.nivel-num {
+  font-family: var(--fonte-placa); font-weight: 700; font-size: 14px;
+  text-transform: uppercase; letter-spacing: .05em;
+  background: var(--amarelo); color: #15171a;
+  border: 2px solid #15171a; border-radius: 6px;
+  padding: 0 6px; white-space: nowrap;
 }
-.painel-chance b.ok { color: var(--verde); }
-.painel-chance b.meio { color: var(--amarelo); }
-.painel-chance b.nao { color: var(--vermelho); }
-.painel-chance span, .painel-meta span { font-size: 13px; color: var(--muted); }
-.painel-meta { text-align: right; }
-.painel-meta b { font-size: 22px; }
-@media (max-width: 480px) { .painel-meta { text-align: left; } }
+.nivel small { display: block; margin-top: 5px; font-size: 11.5px; color: var(--muted); }
+@media (max-width: 520px) { .nivel { flex-basis: 100%; } }
 
-.mapa { display: grid; gap: 11px; margin-top: 18px; }
-.mapa-cab { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; }
-.mapa-nome { font-weight: 500; }
-.mapa-num { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.barrinha {
+  height: 8px; margin-top: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 4px; overflow: hidden;
+}
+.barrinha i { display: block; height: 100%; background: var(--azul); transition: width .4s ease; }
+.barrinha.xp i { background: var(--amarelo); }
+.barrinha.cheia i { background: var(--verde); }
+
+/* ---------- HUD ---------- */
+
+.hud {
+  display: grid; gap: 10px; margin-top: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+.hud-bloco {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+.hud-bloco .rotulo { display: block; font-size: 12px; }
+.hud-bloco > b { display: block; font-size: 24px; line-height: 1.2; font-weight: 600; }
+.hud-bloco small { display: block; font-size: 12px; color: var(--muted); line-height: 1.35; margin-top: 3px; }
+.hud-bloco.chance-ok > b { color: var(--verde); }
+.hud-bloco.chance-meio > b { color: var(--amarelo); }
+.hud-bloco.chance-nao > b { color: var(--vermelho); }
+.hud-bloco.feito { border-color: var(--verde); }
+.hud-bloco.apagada > b { filter: grayscale(1); opacity: .55; }
+.hud-bloco.clicavel:hover { border-color: var(--line-forte); }
+.hud-botao {
+  position: absolute; inset: 0;
+  background: transparent; border: 0; border-radius: inherit;
+}
+
+/* ---------- próximo passo (botão "start") ---------- */
+
+.proximo { margin-top: 16px; }
+.proximo-btn {
+  width: 100%;
+  display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+  text-align: left;
+  background: var(--amarelo); color: #15171a;
+  border: 3px solid #15171a; border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 5px 0 #15171a;
+  margin-bottom: 5px;
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+.proximo-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 0 #15171a; }
+.proximo-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #15171a; }
+.proximo-icone { font-size: 34px; line-height: 1; }
+.proximo-txt { display: grid; gap: 1px; min-width: 0; }
+.proximo-txt .rotulo { color: rgba(21, 23, 26, .7); font-size: 12px; }
+.proximo-txt b {
+  font-family: var(--fonte-placa); text-transform: uppercase;
+  font-size: clamp(21px, 5.5vw, 27px); line-height: 1.05; letter-spacing: .01em;
+}
+.proximo-txt span { font-size: 13.5px; line-height: 1.35; }
+.proximo-play { display: grid; justify-items: center; gap: 4px; font-size: 26px; line-height: 1; }
+.proximo-play kbd { background: rgba(255, 255, 255, .55); color: #15171a; border-color: #15171a; }
+
+/* ---------- modos ---------- */
+
+.modos { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.modo {
+  grid-template-columns: 44px 1fr auto;
+  align-items: start;
+  position: relative;
+}
+.modo.largo { grid-column: 1 / -1; }
+.modo-icone {
+  width: 44px; height: 44px; display: grid; place-items: center;
+  font-size: 26px; line-height: 1;
+  background: var(--surface-2); border-radius: 10px;
+}
+.modo-corpo { min-width: 0; }
+.modo h3 { font-size: 16.5px; }
+.modo .barrinha { margin-top: 9px; }
+.modo .barrinha i { background: var(--vermelho); }
+.modo-lado { display: grid; justify-items: end; gap: 6px; }
+.modo[disabled] { opacity: .72; }
+.modo.trancado .modo-icone { background: transparent; border: 1px dashed var(--line-forte); }
+.modo-corpo .selo { display: inline-block; margin-top: 8px; }
+.selo {
+  font-family: var(--fonte-dado); font-size: 11.5px; font-weight: 500;
+  padding: 1px 7px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--line);
+  color: var(--muted); white-space: nowrap;
+}
+.selo.alerta { background: var(--vermelho-fraco); border-color: var(--vermelho); color: var(--vermelho); }
+
+/* Cursor de jogo: seta ▶ ao lado do item escolhido. */
+.modo.cursor-nav::before, .fase.cursor-nav::before, .proximo-btn.cursor-nav::before {
+  content: "▶"; position: absolute; left: -17px; top: 50%; transform: translateY(-50%);
+  font-size: 12px; color: var(--ink);
+}
+.proximo-btn, .fase { position: relative; }
+.proximo-btn.cursor-nav { outline-color: var(--ink); }
+
+.treino-ajuste {
+  margin-top: 12px;
+  padding: 10px 14px 12px;
+  border: 1px dashed var(--line-forte);
+  border-radius: 10px;
+}
+.treino-ajuste > .rotulo { margin: 0; }
+.treino-ajuste .filtros { margin-top: 6px; gap: 10px 16px; }
+.filtro { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; }
+.filtro select { min-width: 0; max-width: 100%; }
+
+/* ---------- fases (módulos) ---------- */
+
+.painel { background: none; border: 0; padding: 0; box-shadow: none; margin-top: 14px; }
+.fases { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.fase {
+  display: grid; gap: 4px; text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: var(--sombra);
+}
+.fase:hover { border-color: var(--line-forte); }
+.fase.completa { border-color: var(--amarelo); }
+.fase-cab { display: flex; justify-content: space-between; align-items: center; }
+.fase-num {
+  font-family: var(--fonte-placa); text-transform: uppercase; letter-spacing: .08em;
+  font-weight: 700; font-size: 13px; color: var(--muted);
+}
+.estrelas i { font-style: normal; font-size: 17px; color: var(--line-forte); }
+.estrelas i.ganha { color: var(--amarelo); }
+.fase-nome { font-weight: 600; font-size: 15px; }
+.fase small { font-size: 12px; color: var(--muted); }
+.fase .mapa-barra { display: block; margin-top: 2px; }
+
 .mapa-barra {
   position: relative; height: 10px; margin-top: 4px;
   background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; overflow: hidden;
@@ -83,16 +214,7 @@ kbd {
 .painel-ac { margin: 14px 0 0; font-size: 13.5px; }
 .painel-legenda { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
 
-/* ---------- modos e menu ---------- */
-
-.modo .seta {
-  font-family: var(--fonte-dado);
-  font-size: 13px; font-weight: 600;
-  min-width: 26px; text-align: center;
-  padding: 2px 6px; border-radius: 5px;
-  border: 1px solid var(--line-forte);
-}
-.filtros-dica { font-size: 12.5px; margin: 8px 0 0; }
+/* ---------- ferramentas ---------- */
 
 .menu-mais {
   display: grid; gap: 8px; margin-top: 14px;
@@ -110,6 +232,23 @@ kbd {
 .menu-icone { font-size: 20px; text-align: center; }
 .menu-txt b { display: block; font-weight: 600; font-size: 14.5px; }
 .menu-txt small { display: block; color: var(--muted); font-size: 12px; line-height: 1.35; }
+
+/* ---------- sobre (recolhido) ---------- */
+
+.sobre { margin-top: 34px; border-top: 1px solid var(--line); }
+.sobre summary {
+  cursor: pointer; padding: 12px 0;
+  font-family: var(--fonte-placa); text-transform: uppercase; letter-spacing: .07em;
+  font-size: 15px; font-weight: 700; color: var(--muted);
+}
+.sobre[open] summary { color: var(--ink); }
+.sobre .regras { margin-top: 4px; }
+.sobre .resumo { margin-top: 16px; }
+
+.filtros-dica { font-size: 12.5px; margin: 8px 0 0; }
+
+.res-xp { margin: 10px 0 0; font-size: 15px; }
+.res-xp b { color: var(--verde); }
 
 /* ---------- prova ---------- */
 

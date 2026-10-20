@@ -85,6 +85,8 @@
     SIM.mostrar('prova');
     pintarQuestao();
     if (sessao.fim) tocarRelogio();
+    sessao.xpInicio = SIM.xp().total;
+    sessao.nivelInicio = SIM.xp().nivel;
     SIM.emit('sessao-inicio', sessao);
   };
 
@@ -107,9 +109,14 @@
   // ---------- modos embutidos ----------
 
   SIM.adicionarModo({
-    id: 'simulado', ordem: 10, cor: 'var(--amarelo)', tecla: 'modoSimulado',
+    id: 'simulado', ordem: 10, cor: 'var(--amarelo)', tecla: 'modoSimulado', icone: '🏁',
     titulo: 'Simulado completo',
-    texto: () => '30 questões sorteadas, 60 minutos, sem ver a resposta até o fim — igual ao dia da prova.',
+    texto: () => '30 questões, 60 minutos, resposta só no fim. Igual ao dia da prova.',
+    badge: () => {
+      const feitos = SIM.progresso.historico.filter((h) => h.modo === 'simulado');
+      if (!feitos.length) return null;
+      return 'recorde ' + Math.max.apply(null, feitos.map((h) => Number(h.acertos) || 0)) + '/30';
+    },
     iniciar: () => SIM.iniciarSessao({
       modo: 'simulado', titulo: 'Simulado', questoes: SIM.banco,
       tamanho: SIM.TAM_SIMULADO, minutos: SIM.MINUTOS, corte: SIM.CORTE
@@ -117,10 +124,10 @@
   });
 
   SIM.adicionarModo({
-    id: 'treino', ordem: 20, cor: 'var(--azul)', tecla: 'modoTreino',
-    titulo: 'Treino com correção na hora',
-    texto: () => 'Responde e já vê o certo e o porquê. Usa os filtros abaixo (' +
-      br(filtroInicio().length) + ' questões no filtro).',
+    id: 'treino', ordem: 20, cor: 'var(--azul)', tecla: 'modoTreino', icone: '🎯',
+    titulo: 'Treino',
+    texto: () => 'Correção e explicação na hora. Usa os ajustes logo abaixo dos modos.',
+    badge: () => br(filtroInicio().length) + ' no filtro',
     iniciar: () => {
       const pool = filtroInicio();
       // Prioriza as que você ainda não viu, sem deixar de fora as já vistas.
@@ -134,15 +141,18 @@
   });
 
   SIM.adicionarModo({
-    id: 'revisao', ordem: 30, cor: 'var(--vermelho)', tecla: 'modoRevisao',
+    id: 'revisao', ordem: 30, cor: 'var(--vermelho)', tecla: 'modoRevisao', icone: '🔁',
     titulo: 'Revisão do dia',
+    badge: () => {
+      const p = SIM.pendentes().length;
+      return p ? { texto: br(p) + ' pendentes', alerta: true } : null;
+    },
     texto: () => {
       const p = SIM.pendentes().length;
       const em = SIM.emRevisao().length;
-      if (!em) return 'Ainda não há questões em revisão. Erros e acertos com 🚩 entram aqui.';
+      if (!em) return 'Erros e acertos com 🚩 entram aqui e voltam no dia certo.';
       if (!p) return 'Nada pendente agora. ' + br(em) + ' em revisão voltam nos próximos dias.';
-      return br(p) + (p === 1 ? ' questão pendente' : ' questões pendentes') +
-        ' hoje. Errou, volta logo; acertou, o intervalo aumenta.';
+      return 'Errou, volta logo; acertou, o intervalo aumenta.';
     },
     disponivel: () => SIM.emRevisao().length > 0,
     iniciar: () => {
@@ -159,10 +169,14 @@
   });
 
   SIM.adicionarModo({
-    id: 'anti-chute', ordem: 40, cor: 'var(--ink)', tecla: 'modoAntiChute',
+    id: 'anti-chute', ordem: 40, cor: 'var(--ink)', tecla: 'modoAntiChute', icone: '🧠',
     titulo: 'Anti-chute',
-    texto: () => 'Só as ' + br(SIM.banco.filter((q) => q.ac).length) +
-      ' questões em que a certa NÃO é a alternativa mais longa. Mede conhecimento, não esperteza.',
+    texto: () => 'As ' + br(SIM.banco.filter((q) => q.ac).length) +
+      ' questões em que a certa NÃO é a mais longa. Mede conhecimento, não esperteza.',
+    badge: () => {
+      const e = ultimaProntidao && ultimaProntidao.est.ac;
+      return e && e.n >= 5 ? Math.round(e.a / e.n * 100) + '% de acerto' : null;
+    },
     iniciar: () => SIM.iniciarSessao({
       modo: 'treino', titulo: 'Anti-chute',
       questoes: SIM.banco.filter((q) => q.ac), tamanho: 20, revelar: true
@@ -181,11 +195,23 @@
     return false;
   };
   SIM.adicionarModo({
-    id: 'chefao', ordem: 90, cor: 'var(--vermelho)', tecla: 'modoChefao',
+    id: 'chefao', ordem: 90, cor: 'var(--vermelho)', tecla: 'modoChefao', icone: '👹', largo: true,
     titulo: 'Simulado Chefão',
     texto: () => SIM.chefaoLiberado()
       ? '30 questões difíceis e anti-chute, 45 minutos, corte de 25. Vencer = pronto pro Detran.'
-      : '🔒 Abre quando a chance estimada de passar chegar a 80%, com todos os módulos bem medidos.',
+      : 'Abre quando a chance de passar chegar a 80%, com todos os módulos bem medidos.',
+    // Barra até a liberação; usa a prontidão já calculada (chefaoLiberado() conta um evento).
+    progresso: () => {
+      if (SIM.progresso.cont.chefaoLiberado) return null;
+      const c = ultimaProntidao && ultimaProntidao.chance;
+      return c == null ? 0 : Math.min(1, c / SIM.CHEFAO.liberaEm);
+    },
+    badge: () => {
+      if (SIM.progresso.historico.some((h) => h.modo === 'chefao' && (Number(h.acertos) || 0) >= SIM.CHEFAO.corte)) return 'vencido ✔';
+      if (SIM.progresso.cont.chefaoLiberado) return { texto: 'liberado', alerta: true };
+      const c = ultimaProntidao && ultimaProntidao.chance;
+      return (c == null ? '?' : Math.round(c * 100) + '%') + ' de 80%';
+    },
     disponivel: () => SIM.chefaoLiberado(),
     iniciar: () => {
       const duras = SIM.banco.filter((q) => q.d === 2 || q.ac);
@@ -197,6 +223,44 @@
   });
 
   // ---------- tela inicial ----------
+
+  // XP e nível: derivados do progresso salvo (nada novo a guardar).
+  SIM.NIVEIS = [
+    { xp: 0, nome: 'Pedestre' },
+    { xp: 150, nome: 'Ciclista' },
+    { xp: 500, nome: 'Aluno de autoescola' },
+    { xp: 1200, nome: 'LADV no bolso' },
+    { xp: 2500, nome: 'Primeira baliza' },
+    { xp: 5000, nome: 'Motorista atento' },
+    { xp: 10000, nome: 'Direção defensiva' },
+    { xp: 18000, nome: 'Pronto pro Detran' },
+    { xp: 30000, nome: 'Instrutor' },
+    { xp: 50000, nome: 'Lenda do trânsito' }
+  ];
+  SIM.xp = function () {
+    let total = 0;
+    Object.keys(SIM.progresso.q).forEach((id) => {
+      const r = SIM.progresso.q[id];
+      total += (r.a || 0) * 10 + (r.ad || 0) * 5 + (r.e || 0) * 2 + (r.cx === SIM.DOMINADA ? 25 : 0);
+    });
+    if (SIM.conquistas) total += Object.keys(SIM.conquistas.ganhas()).length * 100;
+    let i = 0;
+    while (i + 1 < SIM.NIVEIS.length && total >= SIM.NIVEIS[i + 1].xp) i++;
+    const base = SIM.NIVEIS[i].xp;
+    const prox = SIM.NIVEIS[i + 1];
+    return {
+      total, nivel: i + 1, nome: SIM.NIVEIS[i].nome,
+      dentro: total - base, faixa: prox ? prox.xp - base : 0, proximo: prox ? prox.nome : null
+    };
+  };
+
+  function barra(fracao, classe) {
+    const b = criar('div', 'barrinha' + (classe ? ' ' + classe : ''));
+    const i = criar('i');
+    i.style.width = Math.max(0, Math.min(1, fracao)) * 100 + '%';
+    b.appendChild(i);
+    return b;
+  }
 
   function pintarInicio() {
     el('capa-total').textContent = br(SIM.banco.length);
@@ -216,8 +280,11 @@
     el('nota-creditos').hidden = !meta.com_figura;
 
     ultimaProntidao = SIM.prontidao();
-    pintarPainel(ultimaProntidao);
+    pintarNivel();
+    pintarHud(ultimaProntidao);
+    pintarProximo(ultimaProntidao);
     pintarModos();
+    pintarPainel(ultimaProntidao);
     pintarMenu();
     pintarHistorico();
   }
@@ -225,57 +292,165 @@
 
   function pct(x) { return Math.round(x * 100) + '%'; }
 
+  function pintarNivel() {
+    const x = SIM.xp();
+    const alvo = el('nivel');
+    alvo.textContent = '';
+    const topo = criar('div', 'nivel-topo');
+    topo.appendChild(criar('span', 'nivel-num', 'Nv ' + x.nivel));
+    topo.appendChild(criar('b', null, x.nome));
+    alvo.appendChild(topo);
+    alvo.appendChild(barra(x.faixa ? x.dentro / x.faixa : 1, 'xp'));
+    alvo.appendChild(criar('small', 'dado', x.faixa
+      ? br(x.dentro) + ' / ' + br(x.faixa) + ' XP · próximo: ' + x.proximo
+      : br(x.total) + ' XP · nível máximo'));
+
+    // Subiu de nível desde a última vez que a tela inicial foi pintada?
+    const antes = SIM.progresso.cont.nivel;
+    if (antes !== x.nivel) {
+      SIM.progresso.cont.nivel = x.nivel;
+      SIM.salvar();
+      if (antes && x.nivel > antes) {
+        SIM.aviso('Agora você é ' + x.nome + '.', { titulo: 'Subiu para o nível ' + x.nivel, icone: '⬆️', classe: 'conquista', ms: 5000 });
+      }
+    }
+  }
+
+  function bloco(rotulo, valor, detalhe, classe) {
+    const b = criar('div', 'hud-bloco' + (classe ? ' ' + classe : ''));
+    b.appendChild(criar('span', 'rotulo', rotulo));
+    b.appendChild(criar('b', 'dado', valor));
+    if (detalhe) b.appendChild(typeof detalhe === 'string' ? criar('small', null, detalhe) : detalhe);
+    return b;
+  }
+
+  function pintarHud(pr) {
+    const alvo = el('hud');
+    alvo.textContent = '';
+
+    if (pr.chance == null) {
+      const d = criar('div');
+      d.appendChild(barra(pr.respostas / 30));
+      d.appendChild(criar('small', null, br(pr.respostas) + ' de 30 respostas para estimar'));
+      alvo.appendChild(bloco('Chance de passar', '?', d));
+    } else {
+      const c = pr.chance >= 0.8 ? 'ok' : pr.chance >= 0.5 ? 'meio' : 'nao';
+      alvo.appendChild(bloco('Chance de passar', pct(pr.chance),
+        'média ' + pr.media.toFixed(1) + ' de 30' + (pr.fracos.length ? ' · pouco medido: módulo ' + pr.fracos.join(', ') : ''),
+        'chance-' + c));
+    }
+
+    const mh = SIM.metaHoje();
+    const d = criar('div');
+    d.appendChild(barra(mh.novas / mh.alvo, mh.cumprida ? 'cheia' : ''));
+    d.appendChild(criar('small', null, mh.cumprida ? 'meta batida ✔'
+      : mh.pendentes ? br(mh.pendentes) + ' de revisão pendentes' : 'novas hoje · revisão em dia'));
+    alvo.appendChild(bloco('Meta do dia', Math.min(mh.novas, mh.alvo) + '/' + mh.alvo, d, mh.cumprida ? 'feito' : ''));
+
+    const seq = SIM.sequencia();
+    alvo.appendChild(bloco('Sequência', '🔥 ' + seq, seq === 1 ? 'dia de meta batida' : 'dias seguidos', seq ? 'acesa' : 'apagada'));
+
+    if (SIM.conquistas) {
+      const tot = SIM.conquistas.catalogo.length;
+      const n = Object.keys(SIM.conquistas.ganhas()).length;
+      const b = bloco('Conquistas', '🏅 ' + n + '/' + tot, barra(n / tot), 'clicavel');
+      const botao = criar('button', 'hud-botao');
+      botao.type = 'button';
+      botao.dataset.nav = '';
+      botao.setAttribute('aria-label', 'Ver conquistas');
+      botao.addEventListener('click', () => SIM.mostrar('conquistas'));
+      b.appendChild(botao);
+      alvo.appendChild(b);
+    }
+  }
+
+  // Recomenda o próximo passo: revisão > meta de novas > chefão > simulado.
+  function proximoPasso(pr) {
+    const mh = SIM.metaHoje();
+    if (mh.pendentes) {
+      return { modo: 'revisao', titulo: 'Revisar ' + br(mh.pendentes) + (mh.pendentes === 1 ? ' questão' : ' questões'),
+        texto: 'Elas venceram hoje. Revisar na hora certa é o que fixa a matéria.', icone: '🔁' };
+    }
+    if (mh.novas < mh.alvo) {
+      const falta = mh.alvo - mh.novas;
+      return { modo: 'novas', titulo: mh.novas ? 'Faltam ' + falta + ' novas para a meta' : 'Começar a meta do dia',
+        texto: 'Treino com questões que você nunca viu, com correção na hora.', icone: '🎯' };
+    }
+    if (pr.chance != null && pr.chance >= SIM.CHEFAO.liberaEm && !pr.fracos.length) {
+      return { modo: 'chefao', titulo: 'Enfrentar o Chefão', texto: 'Meta batida e chance alta. Hora do teste mais difícil.', icone: '👹' };
+    }
+    return { modo: 'simulado', titulo: 'Fazer um simulado', texto: 'Meta batida. Um simulado completo mede como você está.', icone: '🏁' };
+  }
+
+  function treinarNovas(questoes, titulo) {
+    const novas = SIM.embaralhar(questoes.filter((q) => SIM.situacao(q) === 'nova'));
+    const resto = SIM.embaralhar(questoes.filter((q) => SIM.situacao(q) !== 'nova'));
+    SIM.iniciarSessao({ modo: 'treino', titulo, questoes: novas.concat(resto), embaralhar: false, tamanho: 20, revelar: true });
+  }
+
+  function pintarProximo(pr) {
+    const alvo = el('proximo');
+    alvo.textContent = '';
+    const p = proximoPasso(pr);
+    const b = criar('button', 'proximo-btn');
+    b.type = 'button';
+    b.dataset.nav = '';
+    b.id = 'btn-proximo';
+    b.appendChild(criar('span', 'proximo-icone', p.icone));
+    const t = criar('span', 'proximo-txt');
+    t.appendChild(criar('small', 'rotulo', 'Próximo passo'));
+    t.appendChild(criar('b', null, p.titulo));
+    t.appendChild(criar('span', null, p.texto));
+    b.appendChild(t);
+    const play = criar('span', 'proximo-play');
+    play.appendChild(criar('span', null, '▶'));
+    play.appendChild(criar('kbd', null, 'Enter'));
+    b.appendChild(play);
+    b.addEventListener('click', () => {
+      if (p.modo === 'novas') treinarNovas(SIM.banco, 'Meta do dia');
+      else SIM.iniciarModo(p.modo);
+    });
+    alvo.appendChild(b);
+  }
+  // Ao abrir o início, o cursor já fica no "próximo passo" (como "Press Start").
+  SIM.focarProximo = function () {
+    const b = el('btn-proximo');
+    if (b && SIM.destacar && !(window.matchMedia && matchMedia('(hover: none)').matches)) SIM.destacar(b);
+  };
+
   function pintarPainel(pr) {
     const alvo = el('painel');
     alvo.textContent = '';
 
-    // Chance de passar
-    const topo = criar('div', 'painel-topo');
-    const chance = criar('div', 'painel-chance');
-    if (pr.chance == null) {
-      chance.appendChild(criar('b', 'dado', '—'));
-      chance.appendChild(criar('span', null, 'Chance de passar: responda pelo menos 30 questões para estimar (' +
-        br(pr.respostas) + ' até agora).'));
-    } else {
-      const b = criar('b', 'dado ' + (pr.chance >= 0.8 ? 'ok' : pr.chance >= 0.5 ? 'meio' : 'nao'), pct(pr.chance));
-      chance.appendChild(b);
-      let txt = 'chance estimada de passar hoje · média ' + pr.media.toFixed(1) + ' de 30';
-      if (pr.fracos.length) txt += ' · estimativa fraca no módulo ' + pr.fracos.join(', ') + ' (poucas respostas)';
-      chance.appendChild(criar('span', null, txt));
-    }
-    topo.appendChild(chance);
-
-    // Meta do dia
-    const mh = SIM.metaHoje();
-    const seq = SIM.sequencia();
-    const metaBox = criar('div', 'painel-meta');
-    metaBox.appendChild(criar('b', 'dado', Math.min(mh.novas, mh.alvo) + '/' + mh.alvo));
-    metaBox.appendChild(criar('span', null, 'novas hoje · ' + (mh.pendentes
-      ? br(mh.pendentes) + ' de revisão pendentes'
-      : 'revisão em dia') + (seq ? ' · 🔥 ' + (seq === 1 ? '1 dia de meta batida' : seq + ' dias seguidos') : '')));
-    topo.appendChild(metaBox);
-    alvo.appendChild(topo);
-
-    // Mapa de domínio por módulo
-    const mapa = criar('div', 'mapa');
+    const fases = criar('div', 'fases');
     Object.keys(pr.est.modulos).forEach((m) => {
       const r = pr.est.modulos[m];
-      const linha = criar('div', 'mapa-linha');
-      const cab = criar('div', 'mapa-cab');
-      cab.appendChild(criar('span', 'mapa-nome', m + ' · ' + SIM.modulos[m]));
-      const acerto = r.n ? pct(r.a / r.n) + ' de acerto' : 'não começado';
-      cab.appendChild(criar('span', 'mapa-num dado', br(r.dominadas) + '/' + br(r.total) + ' · ' + acerto));
-      linha.appendChild(cab);
-      const barra = criar('div', 'mapa-barra');
+      const fr = r.total ? r.dominadas / r.total : 0;
+      const estrelas = fr >= 0.85 ? 3 : fr >= 0.5 ? 2 : fr >= 0.2 ? 1 : 0;
+      const b = criar('button', 'fase' + (estrelas === 3 ? ' completa' : ''));
+      b.type = 'button';
+      b.dataset.nav = '';
+      b.title = 'Treinar o módulo ' + m;
+      const cab = criar('span', 'fase-cab');
+      cab.appendChild(criar('span', 'fase-num', 'Fase ' + m));
+      const est = criar('span', 'estrelas');
+      est.setAttribute('aria-label', estrelas + ' de 3 estrelas');
+      for (let i = 0; i < 3; i++) est.appendChild(criar('i', i < estrelas ? 'ganha' : null, '★'));
+      cab.appendChild(est);
+      b.appendChild(cab);
+      b.appendChild(criar('b', 'fase-nome', SIM.modulos[m]));
+      const mb = criar('span', 'mapa-barra');
       const vistas = criar('i', 'vistas'); vistas.style.width = (r.vistas / r.total * 100) + '%';
-      const dom = criar('i', 'dominadas'); dom.style.width = (r.dominadas / r.total * 100) + '%';
-      barra.appendChild(vistas); barra.appendChild(dom);
-      linha.appendChild(barra);
-      mapa.appendChild(linha);
+      const dom = criar('i', 'dominadas'); dom.style.width = (fr * 100) + '%';
+      mb.appendChild(vistas); mb.appendChild(dom);
+      b.appendChild(mb);
+      b.appendChild(criar('small', 'dado', br(r.dominadas) + '/' + br(r.total) + ' dominadas · ' +
+        (r.n ? pct(r.a / r.n) + ' de acerto' : 'não começada')));
+      b.addEventListener('click', () => treinarNovas(SIM.banco.filter((q) => String(q.m) === String(m)), 'Fase ' + m));
+      fases.appendChild(b);
     });
-    alvo.appendChild(mapa);
+    alvo.appendChild(fases);
 
-    // Anti-chute x comum
     const e = pr.est;
     if (e.ac.n >= 5) {
       const pAc = e.ac.a / e.ac.n, pCo = e.comum.n ? e.comum.a / e.comum.n : 0;
@@ -287,28 +462,35 @@
       alvo.appendChild(p);
     }
     alvo.appendChild(criar('p', 'painel-legenda',
-      'Barra escura = dominadas (acertou sem dúvida, ou subiu todas as caixas da revisão). Clara = já vistas.'));
+      'Estrelas: ★ 20%, ★★ 50% e ★★★ 85% das questões dominadas. Barra escura = dominadas; clara = já vistas. Toque numa fase para treinar só ela.'));
   }
 
   function pintarModos() {
     const alvo = el('modos');
     alvo.textContent = '';
     modos.forEach((m) => {
-      const b = criar('button', 'modo');
+      const ok = m.disponivel ? m.disponivel() : true;
+      const b = criar('button', 'modo' + (m.largo ? ' largo' : '') + (ok ? '' : ' trancado'));
       b.type = 'button';
       b.style.setProperty('--faixa', m.cor || 'var(--line-forte)');
       b.dataset.nav = '';
       b.dataset.modo = m.id;
-      const div = criar('div');
+      b.appendChild(criar('span', 'modo-icone', ok ? (m.icone || '▶') : '🔒'));
+      const div = criar('div', 'modo-corpo');
       div.appendChild(criar('h3', null, m.titulo));
       div.appendChild(criar('p', null, typeof m.texto === 'function' ? m.texto() : m.texto));
+      const badge = m.badge ? m.badge() : null;
+      const prog = m.progresso ? m.progresso() : null;
+      if (prog != null) div.appendChild(barra(prog));
+      if (badge) {
+        const txt = typeof badge === 'string' ? badge : badge.texto;
+        div.appendChild(criar('span', 'selo' + (badge.alerta ? ' alerta' : ''), txt));
+      }
       b.appendChild(div);
+      const lado = criar('span', 'modo-lado');
       const tecla = m.tecla && SIM.teclaDe ? SIM.teclaDe(m.tecla) : '';
-      const seta = criar('span', 'seta' + (tecla ? ' com-tecla' : ''));
-      if (tecla) seta.appendChild(criar('span', 'seta-tecla', tecla));
-      seta.appendChild(criar('span', 'seta-flecha', '→'));
-      b.appendChild(seta);
-      const ok = m.disponivel ? m.disponivel() : true;
+      if (tecla) lado.appendChild(criar('kbd', null, tecla));
+      b.appendChild(lado);
       b.disabled = !ok;
       b.addEventListener('click', () => m.iniciar());
       alvo.appendChild(b);
@@ -361,7 +543,10 @@
     alvo.appendChild(caixa);
   }
 
-  SIM.registrarTela('inicio', { elemento: el('tela-inicio'), aoMostrar: pintarInicio });
+  SIM.registrarTela('inicio', {
+    elemento: el('tela-inicio'),
+    aoMostrar: () => { pintarInicio(); SIM.focarProximo(); }
+  });
 
   // ---------- prova ----------
 
@@ -656,6 +841,24 @@
     SIM.emit('sessao-fim', sessao);
   }
 
+  function pintarXpGanho() {
+    let p = el('res-xp');
+    if (!p) {
+      p = criar('p', 'res-xp');
+      p.id = 'res-xp';
+      el('res-sub').insertAdjacentElement('afterend', p);
+    }
+    p.textContent = '';
+    if (sessao.xpInicio == null) return;
+    const x = SIM.xp();
+    const ganho = x.total - sessao.xpInicio;
+    if (ganho <= 0) return;
+    p.appendChild(criar('b', 'dado', '+' + br(ganho) + ' XP'));
+    p.appendChild(document.createTextNode(x.nivel > sessao.nivelInicio
+      ? ' · subiu para o nível ' + x.nivel + ', ' + x.nome + '!'
+      : ' · nível ' + x.nivel + ', ' + x.nome + (x.faixa ? ' (faltam ' + br(x.faixa - x.dentro) + ' para o próximo)' : '')));
+  }
+
   function pintarResultado() {
     const total = sessao.itens.length;
     const acertos = sessao.acertos;
@@ -663,6 +866,7 @@
     const passou = comCorte && acertos >= sessao.corte;
 
     el('res-modo').textContent = sessao.titulo;
+    pintarXpGanho();
     const v = el('res-veredito');
     if (comCorte) {
       v.textContent = passou ? (sessao.modo === 'chefao' ? 'Chefão vencido' : 'Passou') : 'Não passou';

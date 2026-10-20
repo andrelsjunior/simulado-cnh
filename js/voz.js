@@ -560,10 +560,9 @@
   });
 
   SIM.adicionarModo({
-    id: 'ouvir', ordem: 60, cor: 'var(--verde)', tecla: 'modoOuvir',
+    id: 'ouvir', ordem: 60, cor: 'var(--verde)', tecla: 'modoOuvir', icone: '🎧',
     titulo: 'Ouvir (mãos livres)',
-    texto: () => 'Estudar ouvindo, como podcast: lê a questão, espera você pensar e diz a resposta. ' +
-      'Revisão pendente primeiro, depois os filtros abaixo.',
+    texto: () => 'Como podcast: lê a questão, espera você pensar e diz a resposta.',
     iniciar: iniciarOuvir
   });
 

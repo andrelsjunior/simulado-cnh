@@ -14,9 +14,17 @@ português do Brasil, com acentuação correta, tom direto e sem enrolação.
 - Telas: crie uma `<section class="tela" hidden>` via JS, faça `el('app').appendChild(sec)` e
   `SIM.registrarTela(nome, { elemento, aoMostrar(dado), atalhos: { acao: fn }, voltar() })`.
   `SIM.mostrar(nome, dado)` troca de tela; `SIM.irInicio()`.
-- Tela inicial: `SIM.adicionarModo({ id, ordem, cor, titulo, texto: () => str, disponivel: () => bool,
-  iniciar, tecla: '<idDaAcao>' })` (cartões grandes) e `SIM.adicionarMenu({ id, ordem, icone, titulo,
-  texto, acao, tecla })` (grade "Mais").
+- Tela inicial (menu de jogo): nível/XP, HUD (chance, meta, sequência, conquistas), botão
+  "Próximo passo", modos, ajustes do treino, fases (módulos), ferramentas, histórico e "Sobre"
+  recolhido. `SIM.adicionarModo({ id, ordem, cor, icone, titulo, texto: () => str,
+  disponivel: () => bool, iniciar, tecla: '<idDaAcao>', badge: () => str | {texto, alerta} | null,
+  progresso: () => 0..1 | null, largo: bool })` cria um cartão de modo (badge = selo de status;
+  progresso = barra; largo = ocupa a linha toda) e `SIM.adicionarMenu({ id, ordem, icone, titulo,
+  texto, acao, tecla })` um item em "Ferramentas".
+- XP e nível: `SIM.xp()` → `{ total, nivel, nome, dentro, faixa, proximo }`, calculado do progresso
+  (10 por acerto, 5 por acerto com dúvida, 2 por erro, 25 por questão dominada, 100 por conquista);
+  níveis em `SIM.NIVEIS`. Nada novo é salvo além de `cont.nivel` (para o aviso de subida).
+- Nas telas de menu (início e resultado) as setas movem o cursor pela posição na tela (grade).
 - Sessão de questões: `SIM.iniciarSessao({ modo, titulo, questoes, tamanho, minutos, corte, revelar,
   embaralhar, refazer })` — revelar=true é treino (correção na hora).
 - Teclado: `SIM.registrarAcao({ id, grupo: 'prova'|'geral'|'menus', rotulo, padrao: [tecla1, tecla2] })`
