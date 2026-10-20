@@ -5,6 +5,7 @@
 /* ---------- cursor de teclado (estilo menu de jogo) ---------- */
 
 .cursor-nav,
+.cursor-nav:focus-visible,
 .alt.cursor {
   outline: 3px solid var(--amarelo);
   outline-offset: 2px;

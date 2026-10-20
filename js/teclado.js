@@ -103,6 +103,7 @@
     destacar(lista[i]);
   }
 
+  SIM.destacar = (no) => destacar(no);
   function destacar(no) {
     Array.prototype.forEach.call(document.querySelectorAll('.cursor-nav'), (n) => n.classList.remove('cursor-nav'));
     if (!no) return;
@@ -197,7 +198,13 @@
     if (emCampoDeTexto(ev.target)) {
       if (k === 'Escape') { ev.target.blur(); ev.preventDefault(); }
       else if ((k === 'ArrowDown' || k === 'Enter') && ev.target.dataset.navSair != null) {
-        ev.target.blur(); moverGenerico(1); ev.preventDefault();
+        // Sai do campo para o próximo item navegável a partir dele.
+        const lista = navegaveis();
+        const i = lista.indexOf(ev.target);
+        ev.target.blur();
+        if (i >= 0 && lista[i + 1]) { cursores[chaveCursor()] = i + 1; destacar(lista[i + 1]); }
+        else moverGenerico(1);
+        ev.preventDefault();
       }
       return;
     }
