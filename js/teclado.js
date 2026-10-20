@@ -103,6 +103,40 @@
     destacar(lista[i]);
   }
 
+  // Movimento pela posição na tela (grade de cartões): vai para o item mais
+  // próximo na direção pedida; se não houver, cai no movimento em lista.
+  function moverEspacial(dx, dy) {
+    const lista = navegaveis();
+    const atual = document.activeElement;
+    if (!lista.length || lista.indexOf(atual) < 0) { moverGenerico(dy || dx); return; }
+    const r0 = atual.getBoundingClientRect();
+    const cx = r0.left + r0.width / 2, cy = r0.top + r0.height / 2;
+    let melhor = null, nota = Infinity;
+    lista.forEach((n) => {
+      if (n === atual) return;
+      const r = n.getBoundingClientRect();
+      let principal, lateral;
+      if (dy) {
+        principal = dy > 0 ? r.top - r0.bottom : r0.top - r.bottom;
+        if (principal < -4) return;
+        lateral = Math.max(0, Math.max(r.left, r0.left) > Math.min(r.right, r0.right)
+          ? Math.abs((r.left + r.width / 2) - cx) : 0);
+      } else {
+        principal = dx > 0 ? r.left - r0.right : r0.left - r.right;
+        if (principal < -4) return;
+        // Só na mesma faixa horizontal.
+        if (r.bottom < r0.top + 4 || r.top > r0.bottom - 4) return;
+        lateral = Math.abs((r.top + r.height / 2) - cy);
+      }
+      const v = Math.max(0, principal) + lateral * 2;
+      if (v < nota) { nota = v; melhor = n; }
+    });
+    if (!melhor) { if (dy) moverGenerico(dy); return; }
+    cursores[chaveCursor()] = lista.indexOf(melhor);
+    destacar(melhor);
+  }
+  const usaEspacial = () => !(dialogo && !dialogo.hidden) && SIM.emTelaDeMenu && SIM.emTelaDeMenu();
+
   SIM.destacar = (no) => destacar(no);
   function destacar(no) {
     Array.prototype.forEach.call(document.querySelectorAll('.cursor-nav'), (n) => n.classList.remove('cursor-nav'));
@@ -160,8 +194,10 @@
 
   // Ações que funcionam de qualquer tela, se a tela não tratar.
   const globais = {
-    cima: () => moverGenerico(-1),
-    baixo: () => moverGenerico(1),
+    cima: () => usaEspacial() ? moverEspacial(0, -1) : moverGenerico(-1),
+    baixo: () => usaEspacial() ? moverEspacial(0, 1) : moverGenerico(1),
+    proxima: () => usaEspacial() ? moverEspacial(1, 0) : false,
+    anterior: () => usaEspacial() ? moverEspacial(-1, 0) : false,
     confirmar: confirmarGenerico,
     sair: () => {
       if (dialogo && !dialogo.hidden) { fecharDialogo(); return; }

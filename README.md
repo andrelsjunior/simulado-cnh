@@ -8,6 +8,10 @@ uma.
 
 ## O que este fork acrescenta
 
+- **Tela inicial como menu de jogo**: nível e XP, placar (chance de passar, meta do dia,
+  sequência, conquistas), um botão "Próximo passo" que escolhe o que estudar agora (revisão
+  vencida, meta de novas, Chefão ou simulado), modos com status e os módulos como fases com
+  estrelas.
 - **Teclado como menu de jogo**: setas movem o cursor, Espaço/Enter confirmam, A–D ou 1–4
   respondem direto, M marca 🚩, ? lista tudo. Cada ação aceita duas teclas, remapeáveis na
   tela Controles.

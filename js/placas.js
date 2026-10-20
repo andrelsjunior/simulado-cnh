@@ -405,11 +405,12 @@
   });
 
   SIM.adicionarModo({
-    id: 'placas', ordem: 35, cor: 'var(--amarelo)', tecla: 'modoPlacas',
+    id: 'placas', ordem: 35, cor: 'var(--amarelo)', tecla: 'modoPlacas', icone: '🛑',
     titulo: 'Flashcards de placas',
-    texto: () => {
+    texto: () => br(contagem().total) + ' placas com o nome oficial. Vê a figura, pensa e vira o cartão.',
+    badge: () => {
       const c = contagem();
-      return br(c.total) + ' placas · ' + br(c.revisar) + ' para revisar hoje. Vê a figura, pensa e vira o cartão.';
+      return c.revisar ? { texto: br(c.revisar) + ' para hoje', alerta: true } : null;
     },
     disponivel: () => CODIGOS.length > 0,
     iniciar
