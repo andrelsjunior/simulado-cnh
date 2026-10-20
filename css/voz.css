@@ -1,0 +1,78 @@
+/* Estilos do módulo voz. */
+
+.btn-voz.ativa { background: var(--verde-fraco); border-color: var(--verde); color: var(--verde); }
+
+/* ---------- tela Ouvir (mãos livres) ---------- */
+
+.ouvir-aviso { margin-top: 0; margin-bottom: 14px; }
+
+.ouvir-palco {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--verde);
+  border-radius: 12px;
+  box-shadow: var(--sombra);
+  padding: 18px;
+}
+.ouvir-topo { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+.ouvir-status {
+  margin: 12px 0 0;
+  font-family: var(--fonte-placa);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--verde);
+  min-height: 1.4em;
+}
+.ouvir-enunciado { margin: 10px 0 14px; font-size: 20px; line-height: 1.42; font-weight: 500; }
+.ouvir-alts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ouvir-alts li {
+  display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start;
+  padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line);
+  font-size: 16.5px; line-height: 1.42;
+}
+.ouvir-letra {
+  font-family: var(--fonte-placa); font-weight: 700;
+  width: 30px; height: 26px; display: grid; place-items: center;
+  border: 1px solid var(--line-forte); border-radius: 5px; color: var(--muted);
+}
+.ouvir-palco .lendo { background: var(--amarelo-fraco); border-color: var(--amarelo); }
+p.ouvir-enunciado.lendo { border-radius: 8px; box-shadow: 0 0 0 6px var(--amarelo-fraco); }
+.ouvir-alts li.certa { background: var(--verde-fraco); border-color: var(--verde); }
+.ouvir-alts li.certa .ouvir-letra { background: var(--verde); border-color: var(--verde); color: #fff; }
+.ouvir-resposta {
+  margin-top: 14px; padding: 12px 14px; border-radius: 9px;
+  background: var(--surface-2); border-left: 4px solid var(--verde);
+}
+.ouvir-resposta p { margin: 0; padding: 4px 6px; border-radius: 6px; }
+.ouvir-resposta .rotulo { display: block; }
+.ouvir-certa { font-weight: 600; font-size: 16.5px; }
+.ouvir-porque { margin-top: 8px !important; font-size: 15px; }
+
+.ouvir-controles {
+  display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 10px; margin-top: 16px;
+}
+.ouvir-controles .btn {
+  min-height: 64px; font-size: 17px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+}
+.ouvir-controles .ouvir-principal { font-size: 20px; }
+.ouvir-controles kbd, .ouvir-tela .acoes kbd { font-size: 11px; text-transform: none; letter-spacing: 0; }
+.ouvir-tela .acoes .btn { display: inline-flex; gap: 8px; align-items: center; }
+@media (hover: none), (pointer: coarse) {
+  .ouvir-tela kbd { display: none; }
+}
+@media (max-width: 420px) {
+  .ouvir-controles { grid-template-columns: 1fr 1fr; }
+  .ouvir-controles .ouvir-principal { grid-column: 1 / -1; order: -1; }
+}
+
+.ouvir-ajustes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+@media (max-width: 420px) { .ouvir-ajustes { grid-template-columns: 1fr; } }
+.ouvir-ajuste {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+}
+.ouvir-ajuste-linha { display: grid; grid-template-columns: 48px 1fr 48px; gap: 8px; align-items: center; margin-top: 6px; }
+.ouvir-mm { min-height: 44px; padding: 0; font-size: 22px; }
+.ouvir-valor { text-align: center; font-size: 20px; }

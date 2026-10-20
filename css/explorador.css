@@ -1,0 +1,92 @@
+/* Estilos do módulo explorador. */
+
+.exp-busca { display: block; }
+.exp-busca .campo { min-height: 44px; font-size: 16px; }
+
+.exp-filtros {
+  display: grid; gap: 10px 12px; margin-top: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 560px) { .exp-filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.exp-filtro { display: grid; gap: 3px; min-width: 0; }
+.exp-filtro .rotulo { font-size: 11.5px; }
+.exp-filtro select { width: 100%; min-height: 40px; min-width: 0; text-overflow: ellipsis; }
+
+/* Barra fixa com o contador e o "Treinar estas" */
+.exp-barra {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 4;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin: 16px -18px 0; padding: 10px 18px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.exp-contador { margin: 0; margin-right: auto; font-size: 14px; font-weight: 600; }
+.exp-barra .btn { font-size: 14px; padding: 9px 14px; min-height: 40px; }
+
+.exp-lista { display: grid; gap: 10px; margin-top: 14px; }
+
+.exp-linha {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line-forte);
+  border-radius: 9px;
+}
+.exp-linha.sit-errada { border-left-color: var(--vermelho); }
+.exp-linha.sit-duvida { border-left-color: var(--amarelo); }
+.exp-linha.sit-revisao { border-left-color: var(--azul); }
+.exp-linha.sit-dominada { border-left-color: var(--verde); }
+.exp-linha.aberta { box-shadow: var(--sombra); }
+
+.exp-linha-cab {
+  display: grid; gap: 6px;
+  width: 100%; min-height: 44px;
+  text-align: left;
+  background: transparent; border: 0; border-radius: 8px;
+  padding: 12px 14px;
+}
+.exp-linha-cab:hover .exp-dica { color: var(--ink); }
+.exp-topo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.exp-num { font-size: 12.5px; font-weight: 600; color: var(--muted); margin-right: 2px; }
+.exp-topo .chip { font-size: 10.5px; padding: 2px 6px; }
+.exp-topo .chip.placa { color: #15171a; }
+.chip.exp-sit.sit-errada { color: var(--vermelho); border-color: var(--vermelho); background: var(--vermelho-fraco); }
+.chip.exp-sit.sit-duvida { color: var(--ink); border-color: var(--amarelo); background: var(--amarelo-fraco); }
+.chip.exp-sit.sit-revisao { color: var(--azul); border-color: var(--azul); }
+.chip.exp-sit.sit-dominada { color: var(--verde); border-color: var(--verde); background: var(--verde-fraco); }
+.chip.exp-ac { border-style: dashed; }
+.exp-band { font-size: 14px; line-height: 1; }
+
+.exp-enunciado { font-size: 15.5px; font-weight: 500; line-height: 1.42; text-wrap: pretty; }
+.exp-linha:not(.aberta) .exp-enunciado {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden;
+}
+.exp-rodape { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.exp-hist { font-size: 12px; color: var(--muted); }
+.exp-dica {
+  font-family: var(--fonte-placa); text-transform: uppercase; letter-spacing: .07em;
+  font-size: 11.5px; font-weight: 700; color: var(--muted); white-space: nowrap;
+}
+
+.exp-corpo { padding: 0 14px 14px; }
+.exp-figura { margin-top: 0; }
+.exp-figura img { width: 130px; height: 130px; }
+.exp-alts { margin-top: 12px; gap: 7px; }
+.exp-alts .alt { font-size: 14.5px; padding: 10px 12px; cursor: default; }
+.exp-coment { margin: 0; }
+.exp-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.exp-acoes .btn { font-size: 13.5px; padding: 8px 14px; min-height: 40px; }
+
+.exp-vazio { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.exp-vazio .btn { font-size: 13.5px; padding: 8px 14px; min-height: 40px; }
+
+.exp-mais { display: block; width: 100%; margin-top: 14px; min-height: 44px; }
+
+@media (max-width: 480px) {
+  .exp-barra { gap: 6px; padding-block: 8px; }
+  .exp-contador { font-size: 12.5px; }
+  .exp-barra .btn { font-size: 13px; padding: 8px 10px; letter-spacing: .04em; }
+  .exp-so-largo { display: none; }
+  .exp-linha-cab { padding: 11px 12px; }
+  .exp-corpo { padding: 0 12px 12px; }
+}
+@media (hover: none), (pointer: coarse) { .exp-tecla { display: none; } }

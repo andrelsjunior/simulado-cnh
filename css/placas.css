@@ -1,0 +1,97 @@
+/* Estilos do módulo placas (flashcards). */
+
+.placas-cab p { margin-top: 6px; }
+.placas-filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.placas-filtro { font-size: 13px; padding: 8px 12px; min-height: 40px; }
+.placas-filtro.ativo { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.placas-prog { margin: 4px 0 10px; font-size: 13px; color: var(--muted); }
+
+/* Cartão com as duas faces empilhadas na mesma célula da grade:
+   a altura é a da face maior, e a virada gira o conjunto. */
+.placas-cartao {
+  perspective: 1200px;
+  cursor: pointer;
+  border-radius: 14px;
+}
+.placas-cartao.virado { cursor: default; }
+.placas-cartao:focus-visible { outline: 2px solid var(--azul); outline-offset: 3px; }
+.placas-interno {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform .38s cubic-bezier(.3, .7, .3, 1);
+}
+.placas-cartao.virado .placas-interno { transform: rotateY(180deg); }
+.placas-face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--sombra);
+  padding: 22px 18px;
+  min-height: 300px;
+}
+.placas-frente {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+}
+.placas-verso { transform: rotateY(180deg); display: flex; flex-direction: column; gap: 12px; }
+
+.placas-img { width: 180px; height: 180px; max-width: 70vw; object-fit: contain; }
+.placas-pergunta { margin: 16px 0 0; font-weight: 500; font-size: 16.5px; }
+.placas-dica { margin: 4px 0 0; font-size: 13px; }
+
+.placas-verso-topo { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center; }
+.placas-mini { width: 64px; height: 64px; object-fit: contain; }
+.placas-etiquetas { display: flex; flex-wrap: wrap; gap: 6px; }
+.placas-tipo.reg { color: var(--vermelho); border-color: var(--vermelho); }
+.placas-tipo.adv { color: var(--ink); background: var(--amarelo-fraco); border-color: var(--amarelo); }
+.placas-nome {
+  margin-top: 6px;
+  font-family: var(--fonte-placa);
+  text-transform: uppercase;
+  font-size: clamp(21px, 5.5vw, 26px);
+  line-height: 1.08;
+}
+.placas-explica { margin: 0; font-size: 16.5px; line-height: 1.45; }
+.placas-tipo-resumo { margin: 0; font-size: 13px; }
+.placas-cai {
+  margin-top: auto;
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+  padding-top: 12px; border-top: 1px solid var(--line);
+  font-size: 14px; color: var(--muted);
+}
+.placas-treinar { font-size: 13px; padding: 8px 14px; min-height: 40px; }
+
+.placas-acoes { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.placas-acoes .placas-virar { grid-column: 1 / -1; min-height: 52px; font-size: 17px; }
+.placas-nao, .placas-sim {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  min-height: 64px; font-size: 18px;
+}
+.placas-nao { background: var(--vermelho-fraco); color: var(--vermelho); border-color: var(--vermelho); }
+.placas-sim { background: var(--verde-fraco); color: var(--verde); border-color: var(--verde); }
+.placas-nao kbd, .placas-sim kbd { font-size: 11px; text-transform: none; letter-spacing: 0; }
+@media (hover: none), (pointer: coarse) {
+  .placas-nao kbd, .placas-sim kbd, .placas-dica { display: none; }
+}
+.placas-rodape { margin-top: 12px; }
+
+.placas-fim { padding-top: 6px; }
+.placas-ok { color: var(--verde); }
+.placas-erro { color: var(--vermelho); }
+.placas-fim-rotulo { margin-top: 22px; }
+.placas-lista { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 8px; }
+.placas-lista li {
+  display: grid; grid-template-columns: 40px 64px 1fr; gap: 10px; align-items: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 9px; padding: 8px 12px;
+  font-size: 14.5px;
+}
+.placas-lista img { width: 40px; height: 40px; object-fit: contain; }
+
+@media (prefers-reduced-motion: reduce) {
+  .placas-interno { transition: none; }
+}
+.placas-etiquetas .chip.placa, .placas-lista b { text-transform: none; }
