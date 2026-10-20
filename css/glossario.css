@@ -1,1 +1,57 @@
 /* Estilos do módulo glossario. */
+
+.termo {
+  text-decoration: underline dotted var(--azul);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  cursor: help;
+  border-radius: 3px;
+}
+.termo:hover { background: color-mix(in srgb, var(--azul) 14%, transparent); }
+.alt.certa .termo, .alt.errada .termo { text-decoration-color: currentColor; }
+
+.balao {
+  position: absolute;
+  z-index: 60;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-forte);
+  border-top: 4px solid var(--azul);
+  border-radius: 10px;
+  padding: 10px 14px 12px;
+  box-shadow: 0 14px 34px -14px rgba(0, 0, 0, .55);
+  font-size: 14.5px;
+  animation: balao-entra .15s ease-out;
+}
+@keyframes balao-entra { from { opacity: 0; transform: translateY(-4px); } }
+.balao-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.balao-cab b { font-family: var(--fonte-placa); text-transform: uppercase; letter-spacing: .05em; font-size: 16px; }
+.balao-fechar {
+  background: none; border: 0; font-size: 22px; line-height: 1; padding: 4px 8px; color: var(--muted);
+}
+
+.def p { margin: 6px 0 0; }
+.def-simples { font-weight: 500; }
+.def-oficial {
+  margin-top: 8px; padding: 8px 10px;
+  background: var(--surface-2); border-left: 3px solid var(--line-forte); border-radius: 6px;
+  font-size: 13.5px; color: var(--muted);
+}
+.def-oficial .rotulo { font-size: 11px; }
+.def-oficial p { margin-top: 2px; }
+
+.glossario-lista { display: grid; gap: 10px; margin-top: 14px; }
+.glossario-item {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 12px 14px;
+}
+.glossario-item h3 {
+  font-size: 16px; font-weight: 600;
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.chip-filtro { font-size: 12.5px; padding: 6px 10px; }
+.chip-filtro.ativo { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) { .balao { animation: none; } }

@@ -1,1 +1,6 @@
 /* Estilos do módulo config. */
+
+.lista-palavras { margin: 10px 0 0; padding-left: 20px; font-size: 14.5px; }
+.lista-palavras li { margin: 3px 0; }
+.btn.perigo { color: var(--vermelho); border-color: var(--vermelho); }
+#tela-config .opcao { margin-top: 10px; }

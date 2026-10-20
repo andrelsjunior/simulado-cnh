@@ -33,8 +33,15 @@ kbd {
   font-size: 12px;
   color: var(--muted);
 }
+/* Sem teclado (toque): esconde dicas e letras de atalho. */
+.modo .seta .seta-flecha { display: none; }
+.modo .seta:not(.com-tecla) .seta-flecha { display: inline; }
+.modo .seta:not(.com-tecla) { border: 0; }
 @media (hover: none), (pointer: coarse) {
-  .dica-teclas { display: none; }
+  .dica-teclas, .menu-item kbd { display: none; }
+  .modo .seta .seta-tecla { display: none; }
+  .modo .seta .seta-flecha { display: inline; }
+  .modo .seta { border: 0; }
 }
 
 /* ---------- painel "pronto pra prova?" ---------- */

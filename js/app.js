@@ -252,7 +252,7 @@
     metaBox.appendChild(criar('b', 'dado', Math.min(mh.novas, mh.alvo) + '/' + mh.alvo));
     metaBox.appendChild(criar('span', null, 'novas hoje · ' + (mh.pendentes
       ? br(mh.pendentes) + ' de revisão pendentes'
-      : 'revisão em dia') + (seq ? ' · 🔥 ' + seq + (seq === 1 ? ' dia' : ' dias') + ' seguidos' : '')));
+      : 'revisão em dia') + (seq ? ' · 🔥 ' + (seq === 1 ? '1 dia de meta batida' : seq + ' dias seguidos') : '')));
     topo.appendChild(metaBox);
     alvo.appendChild(topo);
 
@@ -304,7 +304,10 @@
       div.appendChild(criar('p', null, typeof m.texto === 'function' ? m.texto() : m.texto));
       b.appendChild(div);
       const tecla = m.tecla && SIM.teclaDe ? SIM.teclaDe(m.tecla) : '';
-      b.appendChild(criar('span', 'seta', tecla ? tecla : '→'));
+      const seta = criar('span', 'seta' + (tecla ? ' com-tecla' : ''));
+      if (tecla) seta.appendChild(criar('span', 'seta-tecla', tecla));
+      seta.appendChild(criar('span', 'seta-flecha', '→'));
+      b.appendChild(seta);
       const ok = m.disponivel ? m.disponivel() : true;
       b.disabled = !ok;
       b.addEventListener('click', () => m.iniciar());
