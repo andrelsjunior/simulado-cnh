@@ -176,6 +176,7 @@
 
   // Atalhos de modo só valem fora da prova (para não sair de um simulado sem querer).
   const telasDeMenu = { inicio: true, resultado: true };
+  SIM.emTelaDeMenu = () => !!telasDeMenu[SIM.telaAtual().nome];
   ['modoSimulado', 'modoTreino', 'modoRevisao', 'modoAntiChute', 'modoChefao'].forEach((a) => {
     globais[a] = () => {
       if (!telasDeMenu[SIM.telaAtual().nome]) return false;

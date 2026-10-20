@@ -78,7 +78,7 @@
       usouPonteiro: false,
       filtroRevisao: 'erros'
     };
-    el('etiqueta-modo').textContent = ' · ' + sessao.titulo.toLowerCase();
+    el('etiqueta-modo').textContent = ' · ' + sessao.titulo;
     el('relogio').hidden = !sessao.fim;
     el('num-total').textContent = '/' + sessao.itens.length;
     montarTrilho();
