@@ -2,8 +2,15 @@
 //
 // Em vez de JSON + deflate, usa um codificador aritmético binário adaptativo (o mesmo
 // princípio do LZMA): cada campo tem seu próprio modelo de probabilidade, que aprende
-// enquanto codifica. Campos previsíveis (caixa de revisão, 🚩, a hora da sessão que se
-// repete) custam frações de bit. O resultado vai em base64url depois de "#p=".
+// enquanto codifica. Campos previsíveis (caixa de revisão, 🚩, a sessão que se repete)
+// custam frações de bit. O resultado vai em base64url depois de "#p=".
+//
+// O que mais pesou, medido com 14 a 30 dias de estudo simulado:
+//  - aprendizado por contagem (rápido nas primeiras ocorrências, como no AV1): -8%;
+//  - a caixa de revisão vem primeiro e serve de contexto para acertos/erros e para a
+//    sessão (quem está na caixa 1 errou há pouco): -15%;
+//  - sessão = respostas com menos de 2 h entre si (até 3 h no total), não a hora cheia: -8%.
+// Mistura logística de modelos (PAQ) foi testada e não ganhou nada aqui.
 //
 // Uma única função, esquema(), descreve a ordem dos campos e roda nos dois sentidos:
 // codificando (c.enc = true, lê de "d") e decodificando (preenche "o").
@@ -15,7 +22,7 @@
 
   const SIM = window.SIM;
   const HORA = 3600 * 1000;
-  const VERSAO = 5;
+  const VERSAO = 6;
   const MODOS = ['simulado', 'treino', 'revisao', 'chefao'];
   // Contadores conhecidos viram um índice de 3 bits; 7 = outro (vai o nome).
   const CONT = ['nivel', 'chefaoLiberado', 'glossarioConsultas', 'glossarioTermosDistintos',
@@ -24,7 +31,18 @@
 
   // ---------- codificador aritmético (probabilidades de 11 bits, adaptação rápida) ----------
 
-  const PMAX = 2048, PASSO = 4, TOPO = 0x1000000;
+  // Só + - * / e Math.round: o resultado é idêntico em qualquer navegador (Math.exp/log não).
+  const PMAX = 65536, PMIN = 64, TOPO = 0x1000000, LIMITE = 30;
+  // Probabilidade de o bit ser 0 (em 1/65536) e quantas vezes o contexto já foi visto.
+  // Aprende como uma média (rápido no começo) até LIMITE observações; depois, média móvel.
+  function aprende(m, i, b) {
+    const n = m.n[i];
+    const taxa = (n < LIMITE ? n : LIMITE) + 2;
+    let p = m.p[i];
+    p = b ? p - p / taxa : p + (PMAX - p) / taxa;
+    m.p[i] = Math.min(PMAX - PMIN, Math.max(PMIN, Math.round(p)));
+    if (n < 255) m.n[i] = n + 1;
+  }
 
   function Codificador() {
     this.enc = true;
@@ -42,9 +60,10 @@
   };
   Codificador.prototype.bit = function (m, i, b) {
     b = b ? 1 : 0;
-    const lim = (this.range >>> 11) * m[i];
-    if (!b) { this.range = lim; m[i] += (PMAX - m[i]) >> PASSO; }
-    else { this.low += lim; this.range -= lim; m[i] -= m[i] >> PASSO; }
+    const lim = (this.range >>> 16) * m.p[i];
+    if (!b) this.range = lim;
+    else { this.low += lim; this.range -= lim; }
+    aprende(m, i, b);
     while (this.range < TOPO) { this.range = (this.range * 256) >>> 0; this.desloca(); }
     return b;
   };
@@ -63,10 +82,11 @@
   }
   Decodificador.prototype.prox = function () { return this.pos < this.b.length ? this.b[this.pos++] : 0; };
   Decodificador.prototype.bit = function (m, i) {
-    const lim = (this.range >>> 11) * m[i];
+    const lim = (this.range >>> 16) * m.p[i];
     let b;
-    if (this.code < lim) { this.range = lim; m[i] += (PMAX - m[i]) >> PASSO; b = 0; }
-    else { this.code -= lim; this.range -= lim; m[i] -= m[i] >> PASSO; b = 1; }
+    if (this.code < lim) { this.range = lim; b = 0; }
+    else { this.code -= lim; this.range -= lim; b = 1; }
+    aprende(m, i, b);
     while (this.range < TOPO) {
       this.range = (this.range * 256) >>> 0;
       this.code = ((this.code << 8) | this.prox()) >>> 0;
@@ -76,7 +96,7 @@
 
   // ---------- primitivas (mesmo código para codificar e decodificar) ----------
 
-  const modelo = (n) => new Uint16Array(n).fill(PMAX >> 1);
+  const modelo = (n) => ({ p: new Uint16Array(n).fill(PMAX >> 1), n: new Uint8Array(n) });
 
   // Inteiro de "nbits" bits por árvore binária (cada prefixo tem sua probabilidade).
   function arvore(c, m, nbits, v, base) {
@@ -120,8 +140,9 @@
     const o = {};
     const M = {
       g: numModelo(),
-      visto: modelo(4), a: numModelo(), e: [numModelo(), numModelo()], ad: numModelo(), f: modelo(2),
-      cx: modelo(8 * 8), temU: modelo(2), sn: numModelo(), sd: numModelo(),
+      visto: modelo(4), cx: modelo(8), f: modelo(2), temU: modelo(2), sn: numModelo(), sd: numModelo(),
+      eC: Array.from({ length: 8 }, numModelo), aC: Array.from({ length: 16 }, numModelo),
+      adC: Array.from({ length: 8 }, numModelo),
       hn: numModelo(), hd: numModelo(), modo: modelo(4), ac: numModelo(), tot: numModelo(),
       dn: numModelo(), dd: numModelo(), dr: numModelo(), dv: numModelo(), dx: numModelo(),
       conq: modelo(2), cn: numModelo(), ck: modelo(8), cv: numModelo(),
@@ -138,12 +159,26 @@
     if (!E && total !== SIM.banco.length) throw new Error('O link veio de outra versão do simulado. Recarregue as duas páginas e envie de novo.');
     // Tabela de sessões: as horas distintas em que houve resposta (da mais recente para a
     // mais antiga). Cada questão depois diz só o número da sessão.
-    const horaDe = (r) => Math.max(0, agora - Math.floor(r.u / HORA));
+    // Tabela de sessões (horas atrás, da mais recente para a mais antiga). Sessão = respostas
+    // com menos de 2 h entre uma e outra, até 3 h no total; vale a hora da última resposta.
+    // Cada questão depois diz só o número da sessão.
     let sessoes = [];
+    const sessaoDe = {};
     if (E) {
-      const vistas = {};
-      SIM.banco.forEach((q) => { const r = d.q[q.i]; if (r && (r.n || r.f) && r.u > 0) vistas[horaDe(r)] = 1; });
-      sessoes = Object.keys(vistas).map(Number).sort((x, y) => x - y);
+      const us = [];
+      SIM.banco.forEach((q) => { const r = d.q[q.i]; if (r && (r.n || r.f) && r.u > 0) us.push(r.u); });
+      us.sort((x, y) => y - x);
+      let atual = null, ultimo = 0, inicio = 0;
+      us.forEach((t) => {
+        if (atual === null || ultimo - t > 2 * HORA || inicio - t > 3 * HORA) {
+          atual = Math.max(0, agora - Math.floor(t / HORA));
+          sessoes.push(atual);
+          inicio = t;
+        }
+        sessaoDe[t] = atual;
+        ultimo = t;
+      });
+      sessoes = Array.from(new Set(sessoes)).sort((x, y) => x - y);
     }
     const ns = num(c, M.sn, sessoes.length);
     let hAnt = -1;
@@ -152,9 +187,12 @@
       if (!E) sessoes.push(hAnt);
     }
     const nb = ns > 1 ? 32 - Math.clz32(ns - 1) : 0;
-    const mSessao = modelo(2 << nb);
+    // Um modelo de sessão por (caixa, tentativas 1/2/3+): erradas e revisadas são recentes.
+    const mSessao = Array.from({ length: 32 }, () => modelo(2 << nb));
+
     const posSessao = {};
     sessoes.forEach((h, i) => { posSessao[h] = i; });
+    const idxDe = (r) => posSessao[sessaoDe[r.u]];
 
     o.q = {};
     let antes = 0;
@@ -165,16 +203,15 @@
       const visto = c.bit(M.visto, antes, tem);
       antes = visto;
       if (!visto) continue;
-      const a = num(c, M.a, E ? Math.min(r.a || 0, 1e6) : 0);
-      const e = num(c, M.e[a ? 1 : 0], E ? r.e || 0 : 0);
-      const ad = num(c, M.ad, E ? r.ad || 0 : 0);
+      // A caixa vem primeiro e prevê o resto (caixa 1 = a última foi erro).
+      const cx = arvore(c, M.cx, 3, E ? r.cx & 7 : 0);
+      const e = num(c, M.eC[cx], E ? r.e || 0 : 0);
+      const a = num(c, M.aC[cx * 2 + (e ? 1 : 0)], E ? Math.min(r.a || 0, 1e6) : 0);
+      const ad = num(c, M.adC[cx], E ? r.ad || 0 : 0);
       const f = c.bit(M.f, 0, E ? r.f : 0);
-      // A caixa quase sempre segue do resultado: contexto = (acertou?, errou?, dúvida?).
-      const ctx = (a ? 1 : 0) | (e ? 2 : 0) | (ad ? 4 : 0);
-      const cx = arvore(c, M.cx, 3, E ? r.cx & 7 : 0, ctx * 8);
       let u = 0;
       if (c.bit(M.temU, 0, E ? r.u > 0 : 0)) {
-        const j = arvore(c, mSessao, nb, E ? posSessao[horaDe(r)] : 0);
+        const j = arvore(c, mSessao[cx * 4 + Math.min(a + e + ad, 3)], nb, E ? idxDe(r) : 0);
         if (!E && sessoes[j] === undefined) throw new Error('Link de progresso inválido ou cortado.');
         u = (agora - sessoes[j]) * HORA;
       }

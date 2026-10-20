@@ -80,14 +80,18 @@ SEM linha Co-Authored-By. Não faça push, merge nem rebase; não toque em main.
 quem tem mais tentativas; dias e contadores pelo maior valor; conquistas, histórico, termos do
 glossário e palavras por união).
 
-Formato v5: `[versão][soma de 16 bits][corpo]` em base64url. O corpo sai de um codificador
-aritmético binário adaptativo (estilo LZMA, probabilidades de 11 bits). Uma só função, `esquema()`,
-descreve a ordem dos campos e roda nos dois sentidos. Ordem: hora do envio; tamanho do banco;
-tabela de sessões (horas distintas com resposta); para cada questão do banco um bit "tem registro"
-e, se tiver, acertos, erros, dúvidas, 🚩, caixa (com contexto do resultado) e o número da sessão;
-depois histórico (30), dias (60), conquistas (1 bit cada), contadores, placas (pela lista
-`SIM.placasCodigos`), termos do glossário vistos (1 bit cada) e palavras "não entendi". Não viajam:
-tentativas (= acertos + erros + dúvidas) e próxima revisão (= última resposta + intervalo da caixa).
+Formato v6: `[versão][soma de 16 bits][corpo]` em base64url. O corpo sai de um codificador
+aritmético binário (estilo LZMA, probabilidades de 16 bits) com aprendizado por contagem: cada
+contexto aprende como uma média nas primeiras 30 ocorrências e depois como média móvel. Só usa
+`+ - * /` e `Math.round`, para dar o mesmo resultado em qualquer navegador. Uma só função,
+`esquema()`, descreve a ordem dos campos e roda nos dois sentidos. Ordem: hora do envio; tamanho do
+banco; tabela de sessões (respostas a menos de 2 h uma da outra, até 3 h no total, valendo a hora da
+última); para cada questão do banco um bit "tem registro" e, se tiver, a caixa, depois erros,
+acertos e dúvidas (com a caixa de contexto), 🚩 e o número da sessão (com contexto caixa ×
+tentativas); depois histórico (30), dias (60), conquistas (1 bit cada), contadores, placas (pela
+lista `SIM.placasCodigos`), termos do glossário vistos (1 bit cada) e palavras "não entendi". Não
+viajam: tentativas (= acertos + erros + dúvidas) e próxima revisão (= última resposta + intervalo
+da caixa). Mistura logística de modelos (PAQ) foi testada e não ganhou nada.
 A ordem do banco, do catálogo de conquistas, das placas e do glossário faz parte do formato: mudou
 alguma lista, suba `VERSAO`.
 
