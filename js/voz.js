@@ -91,7 +91,7 @@
 
   // Quebra em frases curtas (o Chrome corta falas longas).
   function frases(t) {
-    const cruas = String(t).split(/(?<=[.!?;:])\s+/).filter(Boolean);
+    const cruas = String(t).replace(/([.!?;:])\s+/g, '$1\u0001').split('\u0001').filter(Boolean);
     // Pedaço curto ("A:", "Questão 3.") vai junto com o seguinte.
     const partes = [];
     cruas.forEach((p) => {
