@@ -1,0 +1,1 @@
+window.GLOSSARIO = window.GLOSSARIO || [];

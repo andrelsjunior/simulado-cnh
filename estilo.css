@@ -1,0 +1,240 @@
+/* Peças novas do fork: painel, menus, teclado, entrega, avisos, páginas. */
+
+.muted { color: var(--muted); }
+
+/* ---------- cursor de teclado (estilo menu de jogo) ---------- */
+
+.cursor-nav,
+.alt.cursor {
+  outline: 3px solid var(--amarelo);
+  outline-offset: 2px;
+}
+.alt.cursor:not(.marcada):not(.certa):not(.errada) { border-color: var(--ink); }
+.alt.cursor .letra { border-color: var(--ink); color: var(--ink); }
+.alt.travada { cursor: default; }
+.alt .alt-texto { min-width: 0; }
+
+kbd {
+  font-family: var(--fonte-dado);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 5px;
+  border: 1px solid var(--line-forte);
+  border-bottom-width: 2px;
+  background: var(--surface-2);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.dica-teclas {
+  margin-top: 18px;
+  font-family: var(--fonte-dado);
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (hover: none), (pointer: coarse) {
+  .dica-teclas { display: none; }
+}
+
+/* ---------- painel "pronto pra prova?" ---------- */
+
+.painel {
+  margin-top: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: var(--sombra);
+}
+.painel-topo { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
+@media (max-width: 480px) { .painel-topo { grid-template-columns: 1fr; } }
+.painel-chance b, .painel-meta b {
+  display: block;
+  font-size: 34px; line-height: 1.05; font-weight: 600;
+}
+.painel-chance b.ok { color: var(--verde); }
+.painel-chance b.meio { color: var(--amarelo); }
+.painel-chance b.nao { color: var(--vermelho); }
+.painel-chance span, .painel-meta span { font-size: 13px; color: var(--muted); }
+.painel-meta { text-align: right; }
+.painel-meta b { font-size: 22px; }
+@media (max-width: 480px) { .painel-meta { text-align: left; } }
+
+.mapa { display: grid; gap: 11px; margin-top: 18px; }
+.mapa-cab { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; }
+.mapa-nome { font-weight: 500; }
+.mapa-num { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.mapa-barra {
+  position: relative; height: 10px; margin-top: 4px;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; overflow: hidden;
+}
+.mapa-barra i { position: absolute; left: 0; top: 0; bottom: 0; }
+.mapa-barra .vistas { background: var(--azul); opacity: .25; }
+.mapa-barra .dominadas { background: var(--verde); }
+.painel-ac { margin: 14px 0 0; font-size: 13.5px; }
+.painel-legenda { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
+
+/* ---------- modos e menu ---------- */
+
+.modo .seta {
+  font-family: var(--fonte-dado);
+  font-size: 13px; font-weight: 600;
+  min-width: 26px; text-align: center;
+  padding: 2px 6px; border-radius: 5px;
+  border: 1px solid var(--line-forte);
+}
+.filtros-dica { font-size: 12.5px; margin: 8px 0 0; }
+
+.menu-mais {
+  display: grid; gap: 8px; margin-top: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.menu-item {
+  display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 11px 12px;
+}
+.menu-item:hover { border-color: var(--line-forte); }
+.menu-icone { font-size: 20px; text-align: center; }
+.menu-txt b { display: block; font-weight: 600; font-size: 14.5px; }
+.menu-txt small { display: block; color: var(--muted); font-size: 12px; line-height: 1.35; }
+
+/* ---------- prova ---------- */
+
+.barra-dir { display: flex; gap: 8px; align-items: center; }
+.trilho i { cursor: pointer; position: relative; height: 6px; }
+.trilho i.bandeira { box-shadow: inset 0 -3px 0 var(--amarelo); opacity: 1; }
+.trilho i.bandeira::after {
+  content: ""; position: absolute; left: 50%; top: -5px; width: 5px; height: 5px;
+  transform: translateX(-50%); border-radius: 50%; background: var(--amarelo);
+}
+.chip.num { font-family: var(--fonte-dado); text-transform: none; letter-spacing: 0; }
+
+.acoes-secundarias { margin-top: 12px; }
+.acoes-secundarias .btn { font-size: 13px; padding: 8px 14px; }
+.btn-marcar.ativa { background: var(--amarelo-fraco); border-color: var(--amarelo); }
+
+/* ---------- entrega ---------- */
+
+.pagina-cab { padding-top: 30px; margin-bottom: 18px; }
+.pagina-titulo {
+  font-family: var(--fonte-placa);
+  text-transform: uppercase;
+  font-size: clamp(26px, 7vw, 34px);
+  line-height: 1;
+}
+.pagina-cab p { margin: 8px 0 0; font-size: 14.5px; }
+
+.grade {
+  display: grid; gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+}
+.celula {
+  display: grid; place-items: center; gap: 0;
+  padding: 8px 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  position: relative;
+}
+.celula span { font-size: 15px; font-weight: 600; }
+.celula small { font-family: var(--fonte-placa); color: var(--muted); font-size: 12px; }
+.celula.vazia { border-style: dashed; border-color: var(--vermelho); }
+.celula.vazia small { color: var(--vermelho); }
+.celula.bandeira { background: var(--amarelo-fraco); border-color: var(--amarelo); }
+.celula.bandeira::after { content: "🚩"; position: absolute; top: -7px; right: -5px; font-size: 13px; }
+
+/* ---------- resultado ---------- */
+
+.segmentado .btn { font-size: 13px; padding: 7px 12px; }
+.segmentado .btn.ativo { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.item.com-bandeira { box-shadow: inset 0 0 0 1px var(--amarelo); }
+.item .band { margin-left: auto; }
+
+/* ---------- avisos (toasts) ---------- */
+
+.avisos {
+  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  left: 16px;
+  display: grid; justify-items: end; gap: 8px;
+  z-index: 50; pointer-events: none;
+}
+.aviso {
+  display: flex; gap: 10px; align-items: center;
+  max-width: 360px;
+  background: var(--ink); color: var(--bg);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 14px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .5);
+  animation: aviso-entra .25s ease-out;
+  pointer-events: auto;
+}
+.aviso.saindo { opacity: 0; transform: translateY(8px); transition: opacity .35s, transform .35s; }
+.aviso-icone { font-size: 24px; line-height: 1; }
+.aviso-corpo b { display: block; font-family: var(--fonte-placa); text-transform: uppercase; letter-spacing: .06em; }
+.aviso.conquista { border: 2px solid var(--amarelo); }
+@keyframes aviso-entra { from { opacity: 0; transform: translateY(12px) scale(.97); } }
+
+/* ---------- diálogo ---------- */
+
+.dialogo {
+  position: fixed; inset: 0; z-index: 40;
+  background: rgba(10, 12, 14, .55);
+  display: grid; place-items: center;
+  padding: 16px;
+}
+.dialogo-caixa {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 32px); overflow: auto;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 4px 18px 18px;
+}
+.dialogo-caixa h2.secao { margin-top: 16px; }
+.ajuda-teclas h3 { margin-top: 16px; }
+.ajuda-teclas dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 8px 0 0; align-items: center; }
+.ajuda-teclas dt { text-align: right; }
+.ajuda-teclas dd { margin: 0; font-size: 14px; }
+
+/* ---------- controles ---------- */
+
+.controles { display: grid; gap: 6px; margin-top: 12px; }
+.controle {
+  display: grid; grid-template-columns: 1fr 92px 92px; gap: 8px; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid var(--line);
+  font-size: 14.5px;
+}
+.tecla {
+  font-family: var(--fonte-dado); font-weight: 600; font-size: 13px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  border: 1px solid var(--line-forte); border-bottom-width: 3px;
+  background: var(--surface);
+}
+.tecla.esperando { border-color: var(--amarelo); background: var(--amarelo-fraco); animation: pisca 1s infinite; }
+@keyframes pisca { 50% { opacity: .55; } }
+.opcao { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; font-size: 14.5px; }
+.opcao input { margin-top: 4px; width: 18px; height: 18px; flex: none; }
+
+/* ---------- campos de texto ---------- */
+
+.campo {
+  font: inherit; font-size: 15px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line-forte);
+  background: var(--surface);
+  color: var(--ink);
+}
+.campo:focus { outline: 2px solid var(--azul); outline-offset: 1px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aviso, .tecla.esperando { animation: none; }
+}

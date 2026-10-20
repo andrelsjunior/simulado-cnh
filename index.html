@@ -482,12 +482,19 @@
     * { transition: none !important; animation: none !important; }
   }
 </style>
+<link rel="stylesheet" href="estilo.css">
+<link rel="stylesheet" href="css/glossario.css">
+<link rel="stylesheet" href="css/explorador.css">
+<link rel="stylesheet" href="css/placas.css">
+<link rel="stylesheet" href="css/voz.css">
+<link rel="stylesheet" href="css/conquistas.css">
+<link rel="stylesheet" href="css/config.css">
 </head>
 <body>
-<div class="coluna">
+<div class="coluna" id="app">
 
-  <!-- ============ CAPA ============ -->
-  <section id="tela-inicio">
+  <!-- ============ INÍCIO ============ -->
+  <section id="tela-inicio" class="tela">
     <header class="capa">
       <div class="marca">
         <div class="losango" aria-hidden="true"><span>30</span></div>
@@ -508,36 +515,15 @@
       </div>
     </header>
 
+    <h2 class="secao">Pronto pra prova?</h2>
+    <div id="painel" class="painel"></div>
+
     <h2 class="secao">Como treinar</h2>
-    <div class="modos">
-      <button class="modo" style="--faixa: var(--amarelo)" data-modo="simulado">
-        <div>
-          <h3>Simulado completo</h3>
-          <p>30 questões sorteadas, 60 minutos, sem ver a resposta até o fim — igual ao dia da prova.</p>
-        </div>
-        <span class="seta" aria-hidden="true">→</span>
-      </button>
-
-      <button class="modo" style="--faixa: var(--azul)" data-modo="treino">
-        <div>
-          <h3>Treino com correção na hora</h3>
-          <p>Responde e já vê o certo e o porquê. Dá para escolher o módulo e a dificuldade.</p>
-        </div>
-        <span class="seta" aria-hidden="true">→</span>
-      </button>
-
-      <button class="modo" style="--faixa: var(--vermelho)" data-modo="revisao" id="btn-revisao">
-        <div>
-          <h3>Só o que você errou</h3>
-          <p id="txt-revisao">Refaz as questões que você já errou alguma vez.</p>
-        </div>
-        <span class="seta" aria-hidden="true">→</span>
-      </button>
-    </div>
+    <div class="modos" id="modos"></div>
 
     <div class="filtros">
       <label class="rotulo" for="sel-modulo">Módulo</label>
-      <select id="sel-modulo">
+      <select id="sel-modulo" data-nav>
         <option value="0">Todos</option>
         <option value="1">1 — Placas, Cores e Caminhos</option>
         <option value="2">2 — Escolhas e Consequências</option>
@@ -545,14 +531,25 @@
         <option value="4">4 — Cuidar, Agir e Preservar</option>
       </select>
       <label class="rotulo" for="sel-dif">Dificuldade</label>
-      <select id="sel-dif">
+      <select id="sel-dif" data-nav>
         <option value="-1">Todas</option>
         <option value="0">Fácil</option>
         <option value="1">Intermediário</option>
         <option value="2">Difícil</option>
       </select>
+      <label class="rotulo" for="sel-extra">Só</label>
+      <select id="sel-extra" data-nav>
+        <option value="">Todas</option>
+        <option value="novas">Nunca vistas</option>
+        <option value="marcadas">Marcadas 🚩</option>
+        <option value="ac">Anti-chute</option>
+        <option value="placa">Com placa</option>
+      </select>
     </div>
-    <p class="rotulo" id="txt-filtro" style="margin-top:10px">&nbsp;</p>
+    <p class="muted filtros-dica">Os filtros valem para o Treino.</p>
+
+    <h2 class="secao">Mais</h2>
+    <div class="menu-mais" id="menu-mais"></div>
 
     <div id="historico"></div>
 
@@ -564,26 +561,28 @@
       <p><b>O que não dá para saber:</b> a resolução diz que as 30 questões são distribuídas “conforme
         critérios estabelecidos pelo órgão máximo executivo de trânsito da União”, e esses critérios
         não são publicados. O simulado sorteia na proporção do próprio banco, que não é
-        necessariamente a proporção da prova.</p>
+        necessariamente a proporção da prova. A “chance de passar” parte dessa mesma proporção.</p>
       <p id="nota-figuras"></p>
       <p id="nota-creditos"><b>As figuras das placas</b> não vêm do PDF oficial — ele traz só o código de cada placa
         (A-33a, R-3…). Os desenhos vieram do Wikimedia Commons, em domínio público ou CC BY-SA 3.0,
         e só foram usados quando o nome do arquivo contém exatamente o código da questão.
         <a href="placas/CREDITOS.txt" id="link-creditos">Autoria e licença de cada figura</a>.</p>
       <p><b>Seu progresso</b> fica só neste aparelho, no navegador. Ninguém mais vê, e limpar os dados
-        do site apaga.</p>
+        do site apaga — use o backup em Configurações para levar para outro aparelho.</p>
     </div>
   </section>
 
   <!-- ============ PROVA ============ -->
-  <section id="tela-prova" hidden>
+  <section id="tela-prova" class="tela" hidden>
     <div class="barra">
       <div class="barra-topo">
         <div class="contador"><span id="num-atual">1</span><small id="num-total">/30</small>
           <small id="etiqueta-modo"></small></div>
-        <div class="relogio dado" id="relogio" hidden>60:00</div>
+        <div class="barra-dir" id="barra-dir">
+          <div class="relogio dado" id="relogio" hidden>60:00</div>
+        </div>
       </div>
-      <div class="trilho" id="trilho" aria-hidden="true"></div>
+      <div class="trilho" id="trilho" aria-label="Questões da rodada"></div>
     </div>
 
     <div class="questao">
@@ -601,14 +600,29 @@
         <button class="btn vazio" id="btn-voltar">Voltar</button>
         <button class="btn largo" id="btn-avancar">Próxima</button>
       </div>
-      <div class="acoes">
-        <button class="btn vazio" id="btn-sair">Sair sem terminar</button>
+      <div class="acoes acoes-secundarias" id="acoes-questao">
+        <button class="btn vazio btn-marcar" id="btn-marcar" aria-pressed="false"><span aria-hidden="true">🚩</span> <span>Marcar dúvida</span></button>
+        <button class="btn vazio" id="btn-sair">Sair</button>
       </div>
+      <p class="dica-teclas" id="dica-teclas"></p>
+    </div>
+  </section>
+
+  <!-- ============ ENTREGA ============ -->
+  <section id="tela-entrega" class="tela" hidden>
+    <header class="pagina-cab">
+      <h1 class="pagina-titulo">Revisar antes de entregar</h1>
+      <p class="muted" id="entrega-resumo"></p>
+    </header>
+    <div class="grade" id="entrega-grade"></div>
+    <div class="acoes">
+      <button class="btn largo" id="btn-entregar" data-nav>Entregar a prova</button>
+      <button class="btn vazio" id="btn-entrega-voltar" data-nav>Voltar à prova</button>
     </div>
   </section>
 
   <!-- ============ RESULTADO ============ -->
-  <section id="tela-resultado" hidden>
+  <section id="tela-resultado" class="tela" hidden>
     <div class="placar">
       <p class="rotulo" id="res-modo">Simulado completo</p>
       <h2 class="veredito" id="res-veredito">Aprovada</h2>
@@ -622,511 +636,41 @@
         <div class="regua-eixo">
           <span style="left:0">0</span>
           <span id="res-rotulo-corte">20 = corte</span>
-          <span style="left:100%">30</span>
+          <span style="left:100%" id="res-max">30</span>
         </div>
       </div>
 
       <div class="quebra" id="res-quebra"></div>
 
       <div class="acoes">
-        <button class="btn" id="btn-denovo">Fazer outro</button>
-        <button class="btn vazio" id="btn-inicio">Voltar ao início</button>
+        <button class="btn" id="btn-denovo" data-nav>Fazer outro</button>
+        <button class="btn vazio" id="btn-inicio" data-nav>Voltar ao início</button>
       </div>
 
       <h2 class="secao">Revisão</h2>
-      <div class="filtros">
-        <button class="btn vazio" id="btn-filtro-revisao" style="font-size:13px;padding:7px 12px">
-          Mostrar também os acertos
-        </button>
+      <div class="filtros segmentado">
+        <button class="btn vazio" data-filtro-rev="erros" data-nav>Erros e 🚩</button>
+        <button class="btn vazio" data-filtro-rev="bandeiras" data-nav>Só 🚩</button>
+        <button class="btn vazio" data-filtro-rev="tudo" data-nav>Tudo</button>
       </div>
       <div class="revisao" id="res-revisao"></div>
     </div>
   </section>
 </div>
 
+<div class="avisos" id="avisos" aria-live="polite"></div>
+
 <script src="banco.js"></script>
-<script>
-  (function () {
-    'use strict';
-
-    var CHAVE = 'bnq-progresso-v1';
-    var LETRAS = ['A', 'B', 'C', 'D'];
-    var DIFICULDADES = ['Fácil', 'Intermediário', 'Difícil'];
-    var TAM_SIMULADO = 30;
-    var CORTE = 20;
-    var MINUTOS = 60;
-
-    var banco = (window.BNQ && window.BNQ.questoes) || [];
-    var modulos = (window.BNQ && window.BNQ.modulos) || {};
-
-    var el = function (id) { return document.getElementById(id); };
-
-    // ---------- progresso (só neste aparelho) ----------
-
-    function lerProgresso() {
-      try {
-        var cru = localStorage.getItem(CHAVE);
-        if (!cru) return { erros: {}, historico: [] };
-        var p = JSON.parse(cru);
-        return { erros: p.erros || {}, historico: p.historico || [] };
-      } catch (e) {
-        return { erros: {}, historico: [] };
-      }
-    }
-
-    function salvarProgresso(p) {
-      try { localStorage.setItem(CHAVE, JSON.stringify(p)); } catch (e) { /* modo privado, sem drama */ }
-    }
-
-    var progresso = lerProgresso();
-
-    // ---------- sorteio ----------
-
-    function embaralhar(lista) {
-      var a = lista.slice();
-      for (var i = a.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var t = a[i]; a[i] = a[j]; a[j] = t;
-      }
-      return a;
-    }
-
-    function filtrar(modulo, dificuldade) {
-      return banco.filter(function (q) {
-        if (modulo && q.m !== modulo) return false;
-        if (dificuldade >= 0 && q.d !== dificuldade) return false;
-        return true;
-      });
-    }
-
-    // ---------- estado da sessão ----------
-
-    var sessao = null;
-
-    function montarSessao(modo, questoes, tamanho) {
-      var escolhidas = embaralhar(questoes).slice(0, tamanho || questoes.length);
-      sessao = {
-        modo: modo,
-        itens: escolhidas.map(function (q) {
-          var alternativas = embaralhar([{ texto: q.c, certa: true }]
-            .concat(q.x.map(function (t) { return { texto: t, certa: false }; })));
-          return { q: q, alternativas: alternativas, marcada: null };
-        }),
-        indice: 0,
-        fim: null,
-        filtroRevisao: 'erros'
-      };
-      if (modo === 'simulado') {
-        sessao.fim = Date.now() + MINUTOS * 60 * 1000;
-      }
-    }
-
-    // ---------- telas ----------
-
-    function mostrar(tela) {
-      el('tela-inicio').hidden = tela !== 'inicio';
-      el('tela-prova').hidden = tela !== 'prova';
-      el('tela-resultado').hidden = tela !== 'resultado';
-      window.scrollTo(0, 0);
-    }
-
-    // ---------- capa ----------
-
-    function pintarCapa() {
-      var br = function (n) { return n.toLocaleString('pt-BR'); };
-      el('capa-total').textContent = br(banco.length);
-      el('capa-fonte').textContent = br(banco.length) + ' questões oficiais';
-
-      // Número honesto: o documento tem 1.500, mas parte delas pergunta sobre
-      // uma placa que o PDF não mostra. Essas ficam de fora do sorteio.
-      var meta = window.BNQ || {};
-      if (meta.excluidas) {
-        el('nota-figuras').innerHTML = '<b>Por que não são 1.500:</b> o documento oficial tem ' +
-          br(meta.total_documento) + ' questões, mas ' + br(meta.excluidas) +
-          ' delas perguntam sobre uma placa que o PDF não mostra (“o que essa placa indica?”) e ' +
-          'para as quais não foi possível recuperar a figura. Sem a imagem elas são impossíveis de ' +
-          'responder, então ficam fora do sorteio. Sobram <b>' + br(meta.total) +
-          '</b>, das quais ' + br(meta.com_figura || 0) + ' aparecem com a figura da placa.';
-      } else {
-        el('nota-figuras').textContent = '';
-      }
-
-      // Sem figura nenhuma, o parágrafo de crédito não faz sentido. E no
-      // arquivo único (offline) o CREDITOS.txt não existe: vira texto.
-      el('nota-creditos').hidden = !meta.com_figura;
-      if (window.PLACAS) {
-        var link = el('link-creditos');
-        if (link) link.replaceWith(document.createTextNode('Créditos no site.'));
-      }
-
-      var nErros = Object.keys(progresso.erros).length;
-      var botao = el('btn-revisao');
-      if (nErros === 0) {
-        botao.disabled = true;
-        el('txt-revisao').textContent = 'Ainda não há erros guardados. Faça um simulado primeiro.';
-      } else {
-        botao.disabled = false;
-        el('txt-revisao').textContent = nErros === 1
-          ? 'Refaz a 1 questão que você já errou.'
-          : 'Refaz as ' + nErros + ' questões que você já errou.';
-      }
-
-      pintarContagemFiltro();
-      pintarHistorico();
-    }
-
-    function pintarContagemFiltro() {
-      var m = Number(el('sel-modulo').value);
-      var d = Number(el('sel-dif').value);
-      var n = filtrar(m, d).length;
-      el('txt-filtro').textContent = n.toLocaleString('pt-BR') +
-        ' questões no filtro atual (vale para o treino)';
-    }
-
-    function pintarHistorico() {
-      var alvo = el('historico');
-      var h = progresso.historico.slice(-6).reverse();
-      if (!h.length) { alvo.innerHTML = ''; return; }
-      // Nada aqui entra por innerHTML: os valores vêm do localStorage, que é
-      // gravado por esta página mas pode ter sido mexido no aparelho.
-      alvo.innerHTML = '';
-      var titulo = document.createElement('h2');
-      titulo.className = 'secao';
-      titulo.textContent = 'Seus últimos resultados';
-      alvo.appendChild(titulo);
-
-      var caixa = document.createElement('div');
-      caixa.className = 'quebra';
-      h.forEach(function (r) {
-        var acertos = Number(r.acertos) || 0;
-        var total = Number(r.total) || 0;
-        var quando = new Date(r.ts).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-        var rotulo = total === TAM_SIMULADO
-          ? (acertos >= CORTE ? 'passaria' : 'não passaria')
-          : 'treino';
-        var div = document.createElement('div');
-        var b = document.createElement('b');
-        b.textContent = acertos + '/' + total;
-        var span = document.createElement('span');
-        span.textContent = quando + ' · ' + rotulo;
-        div.appendChild(b);
-        div.appendChild(span);
-        caixa.appendChild(div);
-      });
-      alvo.appendChild(caixa);
-    }
-
-    // ---------- prova ----------
-
-    function iniciar(modo) {
-      var m = Number(el('sel-modulo').value);
-      var d = Number(el('sel-dif').value);
-
-      if (modo === 'simulado') {
-        montarSessao('simulado', banco, TAM_SIMULADO);
-      } else if (modo === 'treino') {
-        var pool = filtrar(m, d);
-        if (!pool.length) { alert('Nenhuma questão com esse filtro.'); return; }
-        montarSessao('treino', pool, Math.min(pool.length, 20));
-      } else {
-        var ids = progresso.erros;
-        var pendentes = banco.filter(function (q) { return ids[q.i]; });
-        if (!pendentes.length) {
-          // Acertou tudo na última revisão: não há o que refazer.
-          pintarCapa();
-          mostrar('inicio');
-          return;
-        }
-        montarSessao('revisao', pendentes, Math.min(pendentes.length, 20));
-      }
-
-      el('etiqueta-modo').textContent = modo === 'simulado' ? ' · simulado'
-        : modo === 'treino' ? ' · treino' : ' · revisão';
-      el('relogio').hidden = modo !== 'simulado';
-      el('num-total').textContent = '/' + sessao.itens.length;
-
-      montarTrilho();
-      pintarQuestao();
-      mostrar('prova');
-      if (modo === 'simulado') tocarRelogio();
-    }
-
-    function montarTrilho() {
-      var t = el('trilho');
-      t.innerHTML = '';
-      for (var i = 0; i < sessao.itens.length; i++) t.appendChild(document.createElement('i'));
-    }
-
-    function pintarTrilho() {
-      var marcas = el('trilho').children;
-      for (var i = 0; i < sessao.itens.length; i++) {
-        var item = sessao.itens[i];
-        var c = '';
-        if (i === sessao.indice) c = 'atual';
-        else if (item.marcada != null) {
-          if (sessao.modo === 'simulado') c = 'respondida';
-          else c = item.alternativas[item.marcada].certa ? 'certa' : 'errada';
-        }
-        marcas[i].className = c;
-      }
-    }
-
-    function pintarQuestao() {
-      var item = sessao.itens[sessao.indice];
-      var q = item.q;
-      var revelar = sessao.modo !== 'simulado' && item.marcada != null;
-
-      el('num-atual').textContent = sessao.indice + 1;
-
-      var etiquetas = '<span class="chip dif-' + q.d + '">' + DIFICULDADES[q.d] + '</span>' +
-        '<span class="chip">Módulo ' + q.m + ' · ' + modulos[q.m] + '</span>';
-      if (q.p) etiquetas += '<span class="chip placa">Placa ' + q.p + '</span>';
-      el('etiquetas').innerHTML = etiquetas;
-
-      // A figura da placa: no site vem de placas/<código>.svg; no arquivo único
-      // ela já está embutida em window.PLACAS como data URI.
-      var figura = el('placa-figura');
-      if (q.g && q.p) {
-        var img = el('placa-img');
-        // Se a figura não carregar, esconder a moldura vazia em vez de deixar
-        // um ícone quebrado ao lado de uma pergunta que depende dela.
-        img.onerror = function () { figura.hidden = true; };
-        img.src = (window.PLACAS && window.PLACAS[q.p]) || ('placas/' + q.p + '.svg');
-        figura.hidden = false;
-      } else {
-        figura.hidden = true;
-      }
-
-      el('enunciado').textContent = q.e;
-
-      var caixa = el('alternativas');
-      caixa.innerHTML = '';
-      item.alternativas.forEach(function (alt, i) {
-        var b = document.createElement('button');
-        b.className = 'alt';
-        b.type = 'button';
-        b.innerHTML = '<span class="letra">' + LETRAS[i] + '</span><span></span>';
-        b.lastChild.textContent = alt.texto;
-
-        if (revelar) {
-          b.disabled = true;
-          if (alt.certa) b.classList.add('certa');
-          else if (item.marcada === i) b.classList.add('errada');
-        } else if (item.marcada === i) {
-          b.classList.add('marcada');
-        }
-
-        b.addEventListener('click', function () { responder(i); });
-        caixa.appendChild(b);
-      });
-
-      if (revelar && q.k) {
-        el('comentario-texto').textContent = q.k;
-        el('comentario').hidden = false;
-      } else {
-        el('comentario').hidden = true;
-      }
-
-      el('btn-voltar').disabled = sessao.indice === 0;
-      el('btn-avancar').textContent =
-        sessao.indice === sessao.itens.length - 1 ? 'Terminar' : 'Próxima';
-
-      pintarTrilho();
-    }
-
-    function responder(i) {
-      var item = sessao.itens[sessao.indice];
-      if (sessao.modo !== 'simulado' && item.marcada != null) return;
-      item.marcada = i;
-      pintarQuestao();
-    }
-
-    function avancar() {
-      if (sessao.indice === sessao.itens.length - 1) { terminar(); return; }
-      sessao.indice++;
-      pintarQuestao();
-      window.scrollTo(0, 0);
-    }
-
-    function voltar() {
-      if (sessao.indice === 0) return;
-      sessao.indice--;
-      pintarQuestao();
-      window.scrollTo(0, 0);
-    }
-
-    // ---------- relógio ----------
-
-    var timer = null;
-
-    function tocarRelogio() {
-      clearInterval(timer);
-      timer = setInterval(function () {
-        var resta = Math.max(0, sessao.fim - Date.now());
-        var min = Math.floor(resta / 60000);
-        var seg = Math.floor((resta % 60000) / 1000);
-        var r = el('relogio');
-        r.textContent = (min < 10 ? '0' : '') + min + ':' + (seg < 10 ? '0' : '') + seg;
-        r.classList.toggle('apertado', resta <= 5 * 60 * 1000);
-        if (resta === 0) { clearInterval(timer); terminar(); }
-      }, 250);
-    }
-
-    // ---------- resultado ----------
-
-    function terminar() {
-      clearInterval(timer);
-
-      var acertos = 0;
-      sessao.itens.forEach(function (item) {
-        var certa = item.marcada != null && item.alternativas[item.marcada].certa;
-        if (certa) { acertos++; delete progresso.erros[item.q.i]; }
-        else { progresso.erros[item.q.i] = (progresso.erros[item.q.i] || 0) + 1; }
-      });
-
-      progresso.historico.push({
-        ts: Date.now(), acertos: acertos, total: sessao.itens.length, modo: sessao.modo
-      });
-      if (progresso.historico.length > 40) progresso.historico = progresso.historico.slice(-40);
-      salvarProgresso(progresso);
-
-      pintarResultado(acertos);
-      mostrar('resultado');
-    }
-
-    function pintarResultado(acertos) {
-      var total = sessao.itens.length;
-      var eSimulado = sessao.modo === 'simulado';
-      var passou = acertos >= CORTE;
-
-      el('res-modo').textContent = eSimulado ? 'Simulado completo'
-        : sessao.modo === 'treino' ? 'Treino' : 'Revisão dos erros';
-
-      var v = el('res-veredito');
-      if (eSimulado) {
-        v.textContent = passou ? 'Passou' : 'Não passou';
-        v.className = 'veredito ' + (passou ? 'ok' : 'nao');
-        el('res-sub').textContent = passou
-          ? acertos + ' de 30 — o corte é 20. Na prova de verdade isso é aprovação.'
-          : acertos + ' de 30 — faltaram ' + (CORTE - acertos) +
-            (CORTE - acertos === 1 ? ' acerto' : ' acertos') + ' para o corte de 20.';
-      } else {
-        v.textContent = acertos + ' de ' + total;
-        v.className = 'veredito';
-        el('res-sub').textContent = 'Treino não tem corte — o corte de 20 vale para a prova de 30 questões.';
-      }
-
-      // Régua 0–30 só faz sentido na escala da prova real.
-      var regua = el('res-regua');
-      regua.hidden = !eSimulado;
-      if (eSimulado) {
-        el('res-preenche').style.width = (acertos / 30 * 100) + '%';
-        el('res-preenche').className = 'regua-preenche' + (passou ? '' : ' nao');
-        el('res-corte').style.left = (CORTE / 30 * 100) + '%';
-        el('res-rotulo-corte').style.left = (CORTE / 30 * 100) + '%';
-      }
-
-      // Quebra por módulo: mostra onde ela está perdendo ponto.
-      var porModulo = {};
-      sessao.itens.forEach(function (item) {
-        var m = item.q.m;
-        porModulo[m] = porModulo[m] || { certas: 0, total: 0 };
-        porModulo[m].total++;
-        if (item.marcada != null && item.alternativas[item.marcada].certa) porModulo[m].certas++;
-      });
-      el('res-quebra').innerHTML = Object.keys(porModulo).sort().map(function (m) {
-        var r = porModulo[m];
-        return '<div><b>' + r.certas + '/' + r.total + '</b><span>Módulo ' + m + ' · ' +
-          modulos[m] + '</span></div>';
-      }).join('');
-
-      pintarRevisao();
-    }
-
-    // Monta nó por nó: o texto do banco entra sempre por textContent, nunca por
-    // innerHTML — enunciado e comentário vêm com aspas e sinais que não devem
-    // ser interpretados como marcação.
-    function criar(tag, classe, texto) {
-      var n = document.createElement(tag);
-      if (classe) n.className = classe;
-      if (texto != null) n.textContent = texto;
-      return n;
-    }
-
-    function pintarRevisao() {
-      var so = sessao.filtroRevisao === 'erros';
-      var alvo = el('res-revisao');
-      alvo.innerHTML = '';
-      var mostrados = 0;
-
-      sessao.itens.forEach(function (item, i) {
-        var certa = item.marcada != null && item.alternativas[item.marcada].certa;
-        if (so && certa) return;
-        mostrados++;
-
-        var textoCerta = item.alternativas.filter(function (a) { return a.certa; })[0].texto;
-        var suaResposta = item.marcada == null ? 'Você não respondeu.'
-          : item.alternativas[item.marcada].texto;
-
-        var art = criar('article', 'item' + (certa ? '' : ' errou'));
-
-        var cab = criar('div', 'cab');
-        cab.appendChild(criar('span', 'num', String(i + 1)));
-        cab.appendChild(criar('span', 'q', item.q.e));
-        art.appendChild(cab);
-
-        var dl = criar('dl');
-        if (!certa) {
-          dl.appendChild(criar('dt', null, 'Você marcou'));
-          dl.appendChild(criar('dd', 'errada', suaResposta));
-        }
-        dl.appendChild(criar('dt', null, 'Resposta correta'));
-        dl.appendChild(criar('dd', 'certa', textoCerta));
-        art.appendChild(dl);
-
-        if (item.q.k) art.appendChild(criar('p', 'porque', item.q.k));
-
-        alvo.appendChild(art);
-      });
-
-      if (!mostrados) {
-        alvo.appendChild(criar('div', 'vazio-aviso',
-          'Nenhum erro nesta rodada. Toque em “Mostrar também os acertos” para reler tudo.'));
-      }
-
-      el('btn-filtro-revisao').textContent = so
-        ? 'Mostrar também os acertos' : 'Mostrar só os erros';
-    }
-
-    // ---------- ligações ----------
-
-    Array.prototype.forEach.call(document.querySelectorAll('.modo'), function (b) {
-      b.addEventListener('click', function () { iniciar(b.dataset.modo); });
-    });
-
-    el('sel-modulo').addEventListener('change', pintarContagemFiltro);
-    el('sel-dif').addEventListener('change', pintarContagemFiltro);
-
-    el('btn-avancar').addEventListener('click', avancar);
-    el('btn-voltar').addEventListener('click', voltar);
-    el('btn-sair').addEventListener('click', function () {
-      clearInterval(timer);
-      pintarCapa();
-      mostrar('inicio');
-    });
-
-    el('btn-denovo').addEventListener('click', function () { iniciar(sessao.modo); });
-    el('btn-inicio').addEventListener('click', function () {
-      pintarCapa();
-      mostrar('inicio');
-    });
-    el('btn-filtro-revisao').addEventListener('click', function () {
-      sessao.filtroRevisao = sessao.filtroRevisao === 'erros' ? 'tudo' : 'erros';
-      pintarRevisao();
-    });
-
-    pintarCapa();
-  })();
-</script>
+<script src="js/nucleo.js"></script>
+<script src="js/app.js"></script>
+<script src="js/teclado.js"></script>
+<!-- módulos: cada um adiciona sua tela/modo/menu -->
+<script src="js/glossario-dados.js"></script>
+<script src="js/glossario.js"></script>
+<script src="js/explorador.js"></script>
+<script src="js/placas.js"></script>
+<script src="js/voz.js"></script>
+<script src="js/conquistas.js"></script>
+<script src="js/config.js"></script>
 </body>
 </html>
