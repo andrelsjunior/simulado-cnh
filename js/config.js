@@ -52,6 +52,8 @@
   }
 
   function restaurarDe(texto) {
+    // Link de "Enviar progresso" colado aqui: junta em vez de substituir.
+    if (SIM.receberLink && SIM.receberLink(texto)) return;
     if (!window.confirm('Restaurar este backup? O progresso atual deste aparelho será substituído.')) return;
     try {
       SIM.importar(texto);
@@ -106,6 +108,10 @@
     const n = Object.keys(SIM.progresso.q).length;
     tela.appendChild(criar('p', 'muted', 'O progresso fica só neste navegador (' + br(n) +
       ' questões com histórico). Para levar ao celular ou ao computador, baixe ou copie o backup aqui e restaure lá.'));
+    const ac0 = criar('div', 'acoes');
+    ac0.appendChild(botao('📲 Enviar para outro aparelho', '', () => SIM.enviarProgresso()));
+    tela.appendChild(ac0);
+    tela.appendChild(criar('p', 'muted', 'O jeito do dia a dia: gera um link para mandar a você mesmo (WhatsApp, e-mail). Tocando nele no outro aparelho, o progresso é juntado ao de lá. Abaixo, o backup completo, que substitui tudo.'));
     const ac1 = criar('div', 'acoes');
     ac1.appendChild(botao('Baixar backup', '', baixar));
     ac1.appendChild(botao('Copiar como texto', 'vazio', () => copiarTexto(SIM.exportar(), 'Backup copiado. Cole em Restaurar no outro aparelho.')));
@@ -125,7 +131,7 @@
     const ac2 = criar('div', 'acoes');
     ac2.appendChild(botao('Restaurar de arquivo', 'vazio', () => arquivo.click()));
     ac2.appendChild(botao('Restaurar de texto colado', 'vazio', () => {
-      const t = window.prompt('Cole aqui o texto do backup:');
+      const t = window.prompt('Cole aqui o texto do backup ou o link de progresso:');
       if (t) restaurarDe(t);
     }));
     tela.appendChild(ac2);
