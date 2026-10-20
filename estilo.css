@@ -246,3 +246,5 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
   .aviso, .tecla.esperando { animation: none; }
 }
+
+.chip.placa { text-transform: none; }
